@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<div class="sidebar" data-color="purple"
+		data-image="../resources/assets/img/sidebar-5.jpg">
+
+		<div class="sidebar-wrapper">
+			<div class="logo">
+				<h3>#{sessionScope['LOGIN_USER'].fullName} |</h3>
+				<h5>#{sessionScope['LOGIN_USER'].userRole.name}</h5>
+			</div>
+
+			<ul class="nav">
+				<li><a href="dashboard.xhtml"> <i class="pe-7s-graph"></i>
+						<p>Dashboard</p>
+				</a></li>
+				<li><a> <i class="pe-7s-user"></i>
+						<p>Profile</p>
+				</a></li>
+				<li><a href="userslist.xhtml"> <i class="pe-7s-note2"></i>
+						<p>User List</p>
+				</a></li>
+				
+				<li class="active-pro">
+                       
+                   <p:commandLink value="Logout" action="#{loginBean.logout}"
+						id="submit"/> 
+                        
+                </li>
+				
+			
+
+			</ul>
+		</div>
+	</div>
+
+
+</ui:composition>
