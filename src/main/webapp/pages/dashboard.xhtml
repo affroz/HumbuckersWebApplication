@@ -28,7 +28,11 @@
 		rel="stylesheet" />
 
 </h:head>
-
+<style>
+.test{
+min-height: -webkit-fill-available;
+}
+</style>
 <body>
 	<h:form prependId="false">
 		<div class="wrapper">
@@ -42,8 +46,8 @@
 					<div class="container-fluid">
 
 						<div class="row">
-							<div class="col-md-4">
-								<div class="card">
+							<div class="col-md-6">
+								<div class="card test">
 
 									<div class="header">
 										<h4 class="title">Email Statistics</h4>
@@ -58,8 +62,8 @@
 								</div>
 							</div>
 
-							<div class="col-md-8">
-								<div class="card">
+							<div class="col-md-6">
+								<div class="card test">
 									<div class="header">
 										<h4 class="title">Users Behavior</h4>
 										<p class="category">24 Hours performance</p>
@@ -73,6 +77,7 @@
 								</div>
 							</div>
 						</div>
+						
 
 					</div>
 				</div>
