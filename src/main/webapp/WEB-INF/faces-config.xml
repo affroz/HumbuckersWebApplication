@@ -8,5 +8,11 @@
 		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
 	</application>
 	
-
+   <render-kit>
+        <renderer>
+            <component-family>HumbuckersChart</component-family>
+            <renderer-type>HumbuckersChartRenderer</renderer-type>
+            <renderer-class>com.humbuckers.component.HumbuckersChartRenderer</renderer-class>
+        </renderer>
+    </render-kit>
 </faces-config>
