@@ -9,10 +9,6 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
 import org.springframework.web.context.request.FacesRequestAttributes;
 
-/**
- * @author Ghassan
- *
- */
 
 public class ViewScope implements Scope {
 

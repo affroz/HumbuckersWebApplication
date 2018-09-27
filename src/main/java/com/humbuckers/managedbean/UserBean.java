@@ -11,14 +11,13 @@ import javax.inject.Named;
 
 import org.primefaces.event.RowEditEvent;
 import org.springframework.context.annotation.Scope;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.humbuckers.dto.UsersDTO;
+import com.humbuckers.utils.AbstractRestTemplate;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,21 +38,10 @@ public class UserBean implements Serializable {
 		userlist=fetchAllUsers();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UsersDTO> fetchAllUsers(){
-		 String url = "http://localhost:8090/humbuckers/users/fetchAllUsers";
-		   try {
-			   
-			   RestTemplate restTemplate = new RestTemplate();
-			   restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-			   @SuppressWarnings("unchecked")
-			   List<UsersDTO> user = restTemplate.getForObject(url, List.class);
-			   return user;
-		   }
-		   catch (Exception e) {
-			   e.printStackTrace();
-			// TODO: handle exception
-		}
-		return null;
+	     List<UsersDTO> user = AbstractRestTemplate.restServiceForList("/users/fetchAllUsers");
+	     return user;
 	}
 	
 	
@@ -79,13 +67,11 @@ public class UserBean implements Serializable {
     }
     
     
-    public UsersDTO updateUser(UsersDTO users){
-		 String url = "http://localhost:8090/humbuckers/users/updateUser";
+    public UsersDTO updateUser(UsersDTO user){
 		   try {
-			   
-			   RestTemplate restTemplate = new RestTemplate();
-			   users = restTemplate.postForObject( url, users, UsersDTO.class);
-			   return users;
+			   ObjectMapper mapper = new ObjectMapper();
+			   user = mapper.readValue(AbstractRestTemplate.postForObject("/users/updateUser",user),UsersDTO.class);
+			   return user;
 		   }
 		   catch (Exception e) {
 			   e.printStackTrace();
