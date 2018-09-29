@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
+
+	<ui:define name="content">
+		<style>
+.mydatagrid .ui-grid {
+	background: white !important;
+	border: none !important;
+}
+</style>
+		<h:form prependId="false">
+			<div class="card">
+				<div class="header typo-line text-warning">
+					<h3>Projects</h3>
+					<p:commandButton class="btn btn-info btn-fill pull-right"
+						action="projectdetails.xhtml " ajax="false"
+						value="ADD NEW PROJECT">
+					</p:commandButton>
+				</div>
+
+				<div class="content mydatagrid">
+
+					<p:dataGrid var="project" value="#{projectBean.projectList}"
+						columns="3" layout="grid" rows="6" paginator="false"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="6,12,16" emptyMessage="No Projects found">
+
+							<div class="card ">
+							    <div class="card-header text-success"><h3>#{project.projectName}</h3></div>
+								<div class="card-body">
+									<p class="card-text"><small>Client:</small> #{project.projectClient}</p>
+									<p class="card-text"><small>Main Contractor:</small> #{project.projectMainContractor}</p>
+									<p class="card-text"><small>Interior Designer:</small> #{project.projectInteriorDesigner}</p>
+									<small class="text-muted"><p:commandLink class="card-link" ajax="false" value="View" /></small>
+								</div>
+							</div>
+							
+					</p:dataGrid>
+
+					
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
