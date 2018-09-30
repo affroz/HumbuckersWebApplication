@@ -44,11 +44,11 @@ public class ProjectBean implements Serializable {
 	private List<ActivityMainDTO>activitymainList;
 
 	private List<ActivityTypeDTO> selectedActivity;
-	
+
 	private List<ActivitiesDTO> activityList;
-	
+
 	private List<ProjectDTO>projectList;
-	
+
 	private TreeNode root;
 
 	@PostConstruct
@@ -60,7 +60,7 @@ public class ProjectBean implements Serializable {
 		project=new ProjectDTO();
 		projectList=new ArrayList<ProjectDTO>(); 
 	}
-	
+
 	public String onClickOfMenu() {
 		//activitysubtypeList=fetchAllActivtySubtype();
 		//activitytypeList=fetchAllActivtytype();
@@ -68,20 +68,20 @@ public class ProjectBean implements Serializable {
 		//fetchTypeByMainActivity();
 		activityList=fetchAllActivty();
 		fetchAllProjects();
-		createTree();
+		root=createTree();
 		return "project.xhtml?faces-redirect=true";
 	}
-	
-	
+
+
 	public String addNewProject() {
 		project=new ProjectDTO();
 		return "projectdetails.xhtml?faces-redirect=true";
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 
 	@SuppressWarnings("unchecked")
 	public List<ActivitySubTypeDTO> fetchAllActivtySubtype(){
@@ -100,8 +100,8 @@ public class ProjectBean implements Serializable {
 		List<ActivityMainDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllMainActivity");
 		return list;
 	}
-	
-	
+
+
 
 
 	@SuppressWarnings("unchecked")
@@ -127,51 +127,65 @@ public class ProjectBean implements Serializable {
 					e.printStackTrace();
 				}
 			}
-			
-			
+
+
 			setActivitymainList(new ArrayList<>());
 			activitymainList.addAll(list);
-			
+
 		}
 	}
-	
-	
-	
+
+
+
 	public String saveProject() {
 		if(this.project!=null) {
-			
+
 			try {
-				   ObjectMapper mapper = new ObjectMapper();
-				   project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
-				   FacesContext.getCurrentInstance().addMessage(
-							null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO,
-									"Project saved successfully",
-									"Project saved successfully"));
-				   project=new ProjectDTO();
-				   fetchAllProjects();
-				   return "project.xhtml?faces-redirect=true";
-			   }
-			   catch (Exception e) {
-				   e.printStackTrace();
+				ObjectMapper mapper = new ObjectMapper();
+				project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Project saved successfully",
+								"Project saved successfully"));
+				project=new ProjectDTO();
+				fetchAllProjects();
+				return "project.xhtml?faces-redirect=true";
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 				// TODO: handle exception
 			}
-			
+
 		}
 		return null;
 	}
-	
-	
-	
+
+
+
 	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
 		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects/");
 	}
-	
+
 
 	@SuppressWarnings("unchecked")
 	public List<ActivitiesDTO> fetchAllActivty(){
 		List<ActivitiesDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivity");
+		List<ActivitiesDTO> finalList=new ArrayList<>();
+		if(list!=null && list.size()>0) {
+			list=test(list);
+			setActivityList(new ArrayList<>());
+			activityList.addAll(finalList);
+		}
+
+		return list;
+	}
+
+
+
+
+	public List<ActivitiesDTO> test(List<ActivitiesDTO> list){
 		List<ActivitiesDTO> finalList=new ArrayList<>();
 		if(list!=null && list.size()>0) {
 			for (int j = 0; j < list.size(); j++) {
@@ -180,6 +194,10 @@ public class ProjectBean implements Serializable {
 					Gson gson = new Gson();
 					String jsonString = gson.toJson(list.get(j));
 					ActivitiesDTO entity=mapper.readValue(jsonString,ActivitiesDTO.class);
+					if(entity.getActivityChildList()!=null && entity.getActivityChildList().size()>0) {
+						List<ActivitiesDTO> childList=test(entity.getActivityChildList());
+						entity.setActivityChildList(childList);
+					}
 					finalList.add(entity);
 				} catch (JsonParseException e) {
 					// TODO Auto-generated catch block
@@ -192,40 +210,51 @@ public class ProjectBean implements Serializable {
 					e.printStackTrace();
 				}
 			}
-			
-			
-			setActivityList(new ArrayList<>());
-			activityList.addAll(finalList);
-			
-		}
-		return list;
-	}
-	
-	public TreeNode createTree() {
-		root = new DefaultTreeNode("Activities", null);
-		
-		if(activityList!=null && activityList.size()>0) {
-				
-			test(activityList, root);
 		}
 
-         
-        return root;
-    }
-	
-	private TreeNode test(List<ActivitiesDTO> list,TreeNode root) {
-		
-		if(list!=null && list.size()>0) {
-			for (ActivitiesDTO activitiesDTO : list) {
-				TreeNode child = new DefaultTreeNode(activitiesDTO,root);
+		return finalList;
+	}
+
+
+
+
+	public TreeNode createTree() {
+		TreeNode root = new DefaultTreeNode("Activities", null);
+
+		if(activityList!=null && activityList.size()>0) {
+			for (ActivitiesDTO activitiesDTO : activityList) {
+				TreeNode childnode = new DefaultTreeNode(activitiesDTO,root);
 				if(activitiesDTO.getActivityChildList()!=null && activitiesDTO.getActivityChildList().size()>0) {
-					test(activitiesDTO.getActivityChildList(), child);
+					for (ActivitiesDTO childentity : activitiesDTO.getActivityChildList()) {
+						TreeNode treenode=test(childentity, childnode);
+					}
+					
 				}
+				
 			}
 		}
-		
+
+
 		return root;
-		
+	}
+
+	private TreeNode test(ActivitiesDTO obj,TreeNode node) {
+
+		TreeNode childnode = new DefaultTreeNode(obj,node);
+		if(obj.getActivityChildList()!=null && obj.getActivityChildList().size()>0) {
+			for (ActivitiesDTO childentity : obj.getActivityChildList()) {
+				TreeNode child=new DefaultTreeNode(childentity,childnode);
+				if(childentity.getActivityChildList()!=null && childentity.getActivityChildList().size()>0) {
+					for (ActivitiesDTO entity : childentity.getActivityChildList()) {
+						TreeNode treenode=test(entity, child);
+
+					}
+				}
+			}
+			
+		}
+		return childnode;
+
 	}
 
 }
