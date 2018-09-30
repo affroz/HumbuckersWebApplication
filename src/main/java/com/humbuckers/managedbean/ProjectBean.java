@@ -50,6 +50,8 @@ public class ProjectBean implements Serializable {
 	private List<ProjectDTO>projectList;
 
 	private TreeNode root;
+	
+	private TreeNode[] selectedNodes;
 
 	@PostConstruct
 	public void init() {

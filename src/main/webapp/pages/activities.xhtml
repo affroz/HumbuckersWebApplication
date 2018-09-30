@@ -8,14 +8,15 @@
 	<ui:define name="content">
 
 <h:form prependId="false">
-		<p:treeTable value="#{projectBean.root}" var="document">
+		<p:treeTable value="#{projectBean.root}" var="document"  selectionMode="checkbox" selection="#{projectBean.selectedNodes}">
         
-        <p:column headerText="Name">
-            <h:outputText value="#{document.activityName}" />
+         <f:facet name="header">
+            Activities
+        </f:facet>
+        <p:column>
+            <p:outputLabel value="#{document.activityName}" />
         </p:column>
-        <p:column headerText="Type">
-            <h:outputText value="#{document.activityType}" />
-        </p:column>
+      
       
     </p:treeTable>
 
