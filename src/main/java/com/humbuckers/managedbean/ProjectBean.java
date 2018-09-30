@@ -10,12 +10,15 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
+import com.humbuckers.dto.ActivitiesDTO;
 import com.humbuckers.dto.ActivityMainDTO;
 import com.humbuckers.dto.ActivitySubTypeDTO;
 import com.humbuckers.dto.ActivityTypeDTO;
@@ -42,13 +45,18 @@ public class ProjectBean implements Serializable {
 
 	private List<ActivityTypeDTO> selectedActivity;
 	
+	private List<ActivitiesDTO> activityList;
+	
 	private List<ProjectDTO>projectList;
+	
+	private TreeNode root;
 
 	@PostConstruct
 	public void init() {
 		activitysubtypeList=new ArrayList<ActivitySubTypeDTO>();
 		activitytypeList=new ArrayList<ActivityTypeDTO>();
 		activitymainList=new ArrayList<ActivityMainDTO>();
+		activityList=new ArrayList<ActivitiesDTO>();
 		project=new ProjectDTO();
 		projectList=new ArrayList<ProjectDTO>(); 
 	}
@@ -58,7 +66,9 @@ public class ProjectBean implements Serializable {
 		//activitytypeList=fetchAllActivtytype();
 		//activitymainList=fetchAllActivtyMain();
 		//fetchTypeByMainActivity();
+		activityList=fetchAllActivty();
 		fetchAllProjects();
+		createTree();
 		return "project.xhtml?faces-redirect=true";
 	}
 	
@@ -90,6 +100,8 @@ public class ProjectBean implements Serializable {
 		List<ActivityMainDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllMainActivity");
 		return list;
 	}
+	
+	
 
 
 	@SuppressWarnings("unchecked")
@@ -154,6 +166,66 @@ public class ProjectBean implements Serializable {
 	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
 		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects/");
+	}
+	
+
+	@SuppressWarnings("unchecked")
+	public List<ActivitiesDTO> fetchAllActivty(){
+		List<ActivitiesDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivity");
+		List<ActivitiesDTO> finalList=new ArrayList<>();
+		if(list!=null && list.size()>0) {
+			for (int j = 0; j < list.size(); j++) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Gson gson = new Gson();
+					String jsonString = gson.toJson(list.get(j));
+					ActivitiesDTO entity=mapper.readValue(jsonString,ActivitiesDTO.class);
+					finalList.add(entity);
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			
+			setActivityList(new ArrayList<>());
+			activityList.addAll(finalList);
+			
+		}
+		return list;
+	}
+	
+	public TreeNode createTree() {
+		root = new DefaultTreeNode("Activities", null);
+		
+		if(activityList!=null && activityList.size()>0) {
+				
+			test(activityList, root);
+		}
+
+         
+        return root;
+    }
+	
+	private TreeNode test(List<ActivitiesDTO> list,TreeNode root) {
+		
+		if(list!=null && list.size()>0) {
+			for (ActivitiesDTO activitiesDTO : list) {
+				TreeNode child = new DefaultTreeNode(activitiesDTO,root);
+				if(activitiesDTO.getActivityChildList()!=null && activitiesDTO.getActivityChildList().size()>0) {
+					test(activitiesDTO.getActivityChildList(), child);
+				}
+			}
+		}
+		
+		return root;
+		
 	}
 
 }
