@@ -19,6 +19,7 @@ public class HumbuckersChartRenderer extends CoreRenderer {
 	@Override
 	public void encodeEnd(FacesContext context, UIComponent component) throws IOException {
 		HumbuckersChart chart = (HumbuckersChart) component;
+		@SuppressWarnings("unchecked")
 		List<HumbuckersChartModule> list = (List<HumbuckersChartModule>) chart.getValue();
 		encodeMarkup(context, chart,list);
 		encodeScript(context, chart);

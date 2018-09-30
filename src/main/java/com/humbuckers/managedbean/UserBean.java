@@ -35,7 +35,12 @@ public class UserBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		userlist=new ArrayList<UsersDTO>();
+		
+	}
+	
+	public String onClickOfMenu() {
 		userlist=fetchAllUsers();
+		return "userslist.xhtml?faces-redirect=true";
 	}
 	
 	@SuppressWarnings("unchecked")

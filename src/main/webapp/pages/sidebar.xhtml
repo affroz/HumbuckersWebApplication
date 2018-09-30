@@ -15,21 +15,17 @@
 			</div>
 
 			<ul class="nav">
-				<li><a href="dashboard.xhtml"> <i class="pe-7s-graph"></i>
+				<li><p:commandLink href="dashboard.xhtml"> <i class="pe-7s-graph"></i>
 						<p>Dashboard</p>
-				</a></li>
-				<li><a href="project.xhtml"> <i class="pe-7s-user"></i>
-						<p>Project List</p>
-				</a></li>
-				<li><a href="userslist.xhtml"> <i class="pe-7s-note2"></i>
+				</p:commandLink></li>
+				<li><p:commandLink action="#{projectBean.onClickOfMenu}" 	 ajax="false"> <i class="pe-7s-user"></i><p>Project List</p>
+				</p:commandLink></li>
+				<li><p:commandLink action="#{userBean.onClickOfMenu}" 	 ajax="false"> <i class="pe-7s-note2"></i>
 						<p>User List</p>
-				</a></li>
+				</p:commandLink></li>
 				
 				<li class="active-pro">
-                       
-                   <p:commandLink value="Logout" action="#{loginBean.logout}"
-						id="submit"/> 
-                        
+                   <p:commandLink value="Logout" action="#{loginBean.logout}" id="submit"/> 
                 </li>
 				
 			

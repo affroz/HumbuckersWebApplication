@@ -10,8 +10,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.primefaces.event.FlowEvent;
-import org.primefaces.event.RowEditEvent;
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -22,7 +20,6 @@ import com.humbuckers.dto.ActivityMainDTO;
 import com.humbuckers.dto.ActivitySubTypeDTO;
 import com.humbuckers.dto.ActivityTypeDTO;
 import com.humbuckers.dto.ProjectDTO;
-import com.humbuckers.dto.UsersDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
 import lombok.Getter;
@@ -50,20 +47,31 @@ public class ProjectBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		activitysubtypeList=new ArrayList<ActivitySubTypeDTO>();
-		activitysubtypeList=fetchAllActivtySubtype();
-
 		activitytypeList=new ArrayList<ActivityTypeDTO>();
-		activitytypeList=fetchAllActivtytype();
-
 		activitymainList=new ArrayList<ActivityMainDTO>();
-		activitymainList=fetchAllActivtyMain();
-
-		fetchTypeByMainActivity();
-		
 		project=new ProjectDTO();
 		projectList=new ArrayList<ProjectDTO>(); 
-		fetchAllProjects();
 	}
+	
+	public String onClickOfMenu() {
+		//activitysubtypeList=fetchAllActivtySubtype();
+		//activitytypeList=fetchAllActivtytype();
+		//activitymainList=fetchAllActivtyMain();
+		//fetchTypeByMainActivity();
+		fetchAllProjects();
+		return "project.xhtml?faces-redirect=true";
+	}
+	
+	
+	public String addNewProject() {
+		project=new ProjectDTO();
+		return "projectdetails.xhtml?faces-redirect=true";
+	}
+	
+	
+	
+	
+	
 
 	@SuppressWarnings("unchecked")
 	public List<ActivitySubTypeDTO> fetchAllActivtySubtype(){
@@ -84,6 +92,7 @@ public class ProjectBean implements Serializable {
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public void fetchTypeByMainActivity(){
 		List<ActivityMainDTO>list=new ArrayList<>();
 		if(activitymainList!=null && activitymainList.size()>0) {
@@ -116,7 +125,7 @@ public class ProjectBean implements Serializable {
 	
 	
 	
-	public void saveProject() {
+	public String saveProject() {
 		if(this.project!=null) {
 			
 			try {
@@ -128,6 +137,8 @@ public class ProjectBean implements Serializable {
 									"Project saved successfully",
 									"Project saved successfully"));
 				   project=new ProjectDTO();
+				   fetchAllProjects();
+				   return "project.xhtml?faces-redirect=true";
 			   }
 			   catch (Exception e) {
 				   e.printStackTrace();
@@ -135,10 +146,12 @@ public class ProjectBean implements Serializable {
 			}
 			
 		}
+		return null;
 	}
 	
 	
 	
+	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
 		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects/");
 	}
