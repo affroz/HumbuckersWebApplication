@@ -1,14 +1,13 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
-	xmlns:humbuckers="http://com.is.faces/ui">
+	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
+	<ui:define name="content">
 
 <h:form prependId="false">
-	<div class="content table-responsive table-full-width">
 		<p:treeTable value="#{projectBean.root}" var="document">
         
         <p:column headerText="Name">
@@ -19,10 +18,10 @@
         </p:column>
       
     </p:treeTable>
-	</div>
 
 
 
 </h:form>
 
-</html>
+	</ui:define>
+</ui:composition>
