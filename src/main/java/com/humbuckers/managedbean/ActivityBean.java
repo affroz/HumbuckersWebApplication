@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.humbuckers.dto.ActivitiesDTO;
+import com.humbuckers.dto.ProjectActivitiesDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
 import lombok.Getter;
@@ -40,15 +41,19 @@ public class ActivityBean implements Serializable {
 
 	private ActivitiesDTO selectedActivity;
 	private String newactivityname;
+	
+	private List<ProjectActivitiesDTO> projectActivities;
 
 	@PostConstruct
 	public void init() {
 		activityList=new ArrayList<ActivitiesDTO>();
+		projectActivities=new ArrayList<ProjectActivitiesDTO>();
 		
 	}
 
 	public void onClickOfMenu() {
 		activityList=fetchAllActivty();
+		projectActivities=new ArrayList<ProjectActivitiesDTO>();
 		root=createTree();
 		selectedNodes=null;
 		setSelectedActivity(null);
@@ -58,11 +63,17 @@ public class ActivityBean implements Serializable {
 
 	public void addNewProject() {
 		root=createTree();
+		projectActivities=new ArrayList<ProjectActivitiesDTO>();
 		selectedNodes=null;
 		setSelectedActivity(null);
 		
 	}
-
+	public void editProject() {
+		root=createTree();
+		selectedNodes=null;
+		setSelectedActivity(null);
+		
+	}
 	
 
 	@SuppressWarnings("unchecked")
@@ -121,6 +132,7 @@ public class ActivityBean implements Serializable {
 				if(activitiesDTO.getActivityChildList()!=null && activitiesDTO.getActivityChildList().size()>0) {
 					for (ActivitiesDTO childentity : activitiesDTO.getActivityChildList()) {
 						TreeNode treenode=test(childentity, childnode);
+						treenode.setExpanded(true);
 					}
 
 				}
@@ -141,6 +153,7 @@ public class ActivityBean implements Serializable {
 				if(childentity.getActivityChildList()!=null && childentity.getActivityChildList().size()>0) {
 					for (ActivitiesDTO entity : childentity.getActivityChildList()) {
 						TreeNode treenode=test(entity, child);
+						treenode.setExpanded(true);
 
 					}
 				}
@@ -187,5 +200,39 @@ public class ActivityBean implements Serializable {
 		return null;
 	}
 
+	
+	
+	public List<ProjectActivitiesDTO> fetchProjectActivitiesByProject(Long projectKey){
+		List<ProjectActivitiesDTO> list=AbstractRestTemplate.restServiceForList("/project/fetchProjectActivityByProject/"+projectKey);
+		List<ProjectActivitiesDTO> finalList=fetchAllProjectActivities(list);
+		return list;
+		
+	}
+	
+	public List<ProjectActivitiesDTO> fetchAllProjectActivities(List<ProjectActivitiesDTO> list){
+		List<ProjectActivitiesDTO> finalList=new ArrayList<>();
+		if(list!=null && list.size()>0) {
+			for (int j = 0; j < list.size(); j++) {
+				ObjectMapper mapper = new ObjectMapper();
+				try {
+					Gson gson = new Gson();
+					String jsonString = gson.toJson(list.get(j));
+					ProjectActivitiesDTO entity=mapper.readValue(jsonString,ProjectActivitiesDTO.class);
+					finalList.add(entity);
+				} catch (JsonParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JsonMappingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return finalList;
+	}
 
 }

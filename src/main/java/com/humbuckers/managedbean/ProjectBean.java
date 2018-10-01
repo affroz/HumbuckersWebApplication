@@ -1,5 +1,6 @@
 package com.humbuckers.managedbean;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humbuckers.dto.ActivitiesDTO;
 import com.humbuckers.dto.ProjectActivitiesDTO;
 import com.humbuckers.dto.ProjectDTO;
+import com.humbuckers.dto.UsersDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
 import lombok.Getter;
@@ -39,6 +41,8 @@ public class ProjectBean implements Serializable {
 	private List<ProjectDTO>projectList;
 	
 	private String activeIndex;
+	
+	private Long projectId;
 
 	@PostConstruct
 	public void init() {
@@ -61,6 +65,22 @@ public class ProjectBean implements Serializable {
 		return "project.xhtml?faces-redirect=true";
 	}
 	
+	public String editProject() {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			project = mapper.readValue(AbstractRestTemplate.restServiceForObject("/project/fetchProjectById/"+projectId),ProjectDTO.class);
+			setActiveIndex("0");
+			activityBean.setProjectActivities(activityBean.fetchProjectActivitiesByProject(projectId));
+			fetchActivityByProjectActivities(activityBean.getProjectActivities());
+			return "project.xhtml?faces-redirect=true";
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	
+	}
+
 	public void onClickofNext() {
 		setActiveIndex("1");
 
@@ -73,7 +93,7 @@ public class ProjectBean implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
-		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects/");
+		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects");
 	}
 
 	public String saveProject() {
@@ -122,6 +142,26 @@ public class ProjectBean implements Serializable {
 
 		}
 		return null;
+	}
+	
+	private void fetchActivityByProjectActivities(List<ProjectActivitiesDTO> projectActivities) {
+		int i=0;
+		TreeNode[] selectedNodes = null;
+		for (ProjectActivitiesDTO projectActivitiesDTO : projectActivities) {
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				ActivitiesDTO activity = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey()),ActivitiesDTO.class);
+				TreeNode act=(TreeNode) activity;
+				selectedNodes[i]=act;
+				i++;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		activityBean.setSelectedNodes(selectedNodes);
+		
 	}
 	 
 	
