@@ -18,17 +18,21 @@
 	margin-right: 22px;
 	margin-top: 28px;
 }
+
 .myhover {
 	border: 2px solid #48c7ec;
 	transition: .3s;
 }
-.mycard{
-background-color:#ffffff !Important;
-color:#000000 !Important;
+
+.mycard {
+	background-color: #ffffff !Important;
+	color: #000000 !Important;
 }
-.mycard p{
-font-size:21px !Important;
+
+.mycard p {
+	font-size: 21px !Important;
 }
+
 .mycard:hover .myhover {
 	background: #ffffff none repeat scroll 0 0;
 	border: 2px solid transparent;
@@ -44,7 +48,7 @@ font-size:21px !Important;
 		<h:form prependId="false">
 			<div class="card">
 				<div class="header">
-					<h2 style="color:#87CB16 !important">Projects</h2>
+					<h2 style="color: #87CB16 !important">Projects</h2>
 					<p:commandButton class="btn btn-info btn-fill pull-right"
 						action="#{projectBean.addNewProject}" ajax="false"
 						value="ADD NEW PROJECT">
@@ -59,32 +63,38 @@ font-size:21px !Important;
 						rowsPerPageTemplate="6,12,16" emptyMessage="No Projects found">
 
 						<div class="card mycard">
-						 <div class="myhover">
-						    <div class="myhoverimg">
-						    <p:commandLink> <i class="fa fa-search"></i>
-							</p:commandLink>
-									
+							<div class="myhover">
+								<div class="myhoverimg">
+								
+								<p:commandLink action="#{projectBean.editProject}"
+										update="@form" class="pull-right">
+										<f:setPropertyActionListener value="#{project.projectId}"
+											target="#{projectBean.projectId}" />
+										<i class="fa fa-search"></i>
+									</p:commandLink>
+								
+
 								</div>
-							<div class="card-header text-warning">
-								<h3>#{project.projectName}</h3>
-							</div>
-							<div class="card-body">
-								<p class="card-text">
-									<small>Client:</small> #{project.projectClient}
-								</p>
-								<p class="card-text">
-									<small>Main Contractor:</small>
-									#{project.projectMainContractor}
-								</p>
-								<p class="card-text">
-									<small>Interior Designer:</small>
-									#{project.projectInteriorDesigner}
-								</p>
-							</div>
+								<div class="card-header text-warning">
+									<h3>#{project.projectName}</h3>
+								</div>
+								<div class="card-body">
+									<p class="card-text">
+										<small>Client:</small> #{project.projectClient}
+									</p>
+									<p class="card-text">
+										<small>Main Contractor:</small>
+										#{project.projectMainContractor}
+									</p>
+									<p class="card-text">
+										<small>Interior Designer:</small>
+										#{project.projectInteriorDesigner}
+									</p>
+								</div>
 							</div>
 						</div>
 
-						
+
 
 					</p:dataGrid>
 
