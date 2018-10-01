@@ -10,8 +10,8 @@ import lombok.Setter;
 @Setter
 public class ProjectActivitiesDTO {
 	
-	private ProjectDTO project;
-	private ActivitiesDTO activities;
+	private Long activityKey;
+	private Long projectKey;
 	private Long projectActivityId;
 	private Date activityPlannedStartDate;
 	private Date activityPlannedEndDate;
