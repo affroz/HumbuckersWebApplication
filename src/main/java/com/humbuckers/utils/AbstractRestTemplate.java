@@ -2,6 +2,9 @@ package com.humbuckers.utils;
 
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+
 import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,7 +24,11 @@ public class AbstractRestTemplate {
 
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 			// TODO: handle exception
 		}
 		return "";
@@ -36,8 +43,11 @@ public class AbstractRestTemplate {
 			return restTemplate.getForObject(finalUrl+url, List.class);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 		}
 		return null;
 	}
@@ -50,28 +60,14 @@ public class AbstractRestTemplate {
 			return response;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 		}
 		return null;
 	}
-	
-	
-	public static void main(String [] args)
-	{
-		
-		UsersDTO user=new UsersDTO();
-		user.setUserId(3L);
-		user.setFullName("test");
-		user.setUserName("test");
-		user.setPassword("test");
-		user.setUserRole(new UserRoleDTO());
-		user.getUserRole().setRoleId(1L);
-		
-		String response =postForObject("/users/updateUser",user);
-		
-		System.out.println(response);
 
-	}
 
 }

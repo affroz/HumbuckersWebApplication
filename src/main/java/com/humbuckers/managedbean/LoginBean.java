@@ -50,15 +50,12 @@ public class LoginBean implements Serializable {
 								"Please enter correct username and Password"));
 				return "login"; 
 			}
-		} catch (JsonParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}  catch (IOException e) {
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 		}
 		return "login"; 
 

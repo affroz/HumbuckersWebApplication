@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.primefaces.model.DefaultTreeNode;
@@ -105,15 +107,12 @@ public class ActivityBean implements Serializable {
 						entity.setActivityChildList(childList);
 					}
 					finalList.add(entity);
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					FacesContext.getCurrentInstance().addMessage(
+							null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									"Something went wrong!!",
+									"Something went wrong!!"));
 				}
 			}
 		}
@@ -194,8 +193,11 @@ public class ActivityBean implements Serializable {
 			return act;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			// TODO: handle exception
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 		}
 		return null;
 	}
@@ -205,7 +207,7 @@ public class ActivityBean implements Serializable {
 	public List<ProjectActivitiesDTO> fetchProjectActivitiesByProject(Long projectKey){
 		List<ProjectActivitiesDTO> list=AbstractRestTemplate.restServiceForList("/project/fetchProjectActivityByProject/"+projectKey);
 		List<ProjectActivitiesDTO> finalList=fetchAllProjectActivities(list);
-		return list;
+		return finalList;
 		
 	}
 	
@@ -219,15 +221,12 @@ public class ActivityBean implements Serializable {
 					String jsonString = gson.toJson(list.get(j));
 					ProjectActivitiesDTO entity=mapper.readValue(jsonString,ProjectActivitiesDTO.class);
 					finalList.add(entity);
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					FacesContext.getCurrentInstance().addMessage(
+							null,
+							new FacesMessage(FacesMessage.SEVERITY_ERROR,
+									"Something went wrong!!",
+									"Something went wrong!!"));
 				}
 			}
 		}

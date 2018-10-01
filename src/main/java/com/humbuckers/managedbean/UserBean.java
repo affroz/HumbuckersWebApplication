@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.primefaces.event.RowEditEvent;
@@ -79,8 +80,11 @@ public class UserBean implements Serializable {
 			   return user;
 		   }
 		   catch (Exception e) {
-			   e.printStackTrace();
-			// TODO: handle exception
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Something went wrong!!",
+								"Something went wrong!!"));
 		}
 		return null;
 	}

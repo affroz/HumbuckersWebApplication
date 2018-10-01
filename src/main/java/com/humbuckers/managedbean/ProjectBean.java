@@ -74,8 +74,11 @@ public class ProjectBean implements Serializable {
 			fetchActivityByProjectActivities(activityBean.getProjectActivities());
 			return "project.xhtml?faces-redirect=true";
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Something went wrong!!",
+							"Something went wrong!!"));
 		}
 		return "";
 	
@@ -136,8 +139,11 @@ public class ProjectBean implements Serializable {
 				return "projectList.xhtml?faces-redirect=true";
 			}
 			catch (Exception e) {
-				e.printStackTrace();
-				// TODO: handle exception
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Something went wrong!!",
+								"Something went wrong!!"));
 			}
 
 		}
@@ -155,8 +161,11 @@ public class ProjectBean implements Serializable {
 				selectedNodes[i]=act;
 				i++;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Something went wrong!!",
+								"Something went wrong!!"));
 			}
 			
 		}

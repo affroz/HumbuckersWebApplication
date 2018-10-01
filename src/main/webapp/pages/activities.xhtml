@@ -16,8 +16,10 @@
 				<div class="col-md-12">
 					<p:treeTable value="#{projectBean.activityBean.root}" var="document"
 						selectionMode="checkbox" selection="#{projectBean.activityBean.selectedNodes}"
-						id="treeId">
-						<p:column>
+						id="treeId" >
+						
+						
+						<p:column headerText="Select Activities">
                             <p:outputLabel value="#{document.activityName}" />
 								
 									<p:commandLink oncomplete="PF('documentDialog').show()"
@@ -30,24 +32,25 @@
 
 
 						</p:column>
-						
-						<p:column>
-                             <h:panelGroup  rendered="#{document.activityType eq '2'}">
+						<p:column >
+                             <h:panelGroup  rendered="#{document.activityType eq '2'}" >
 	                             <div class="row" >
 									
-									<div class="col-md-3">
+									<div class="col-md-6">
 										<p:calendar value="#{document.activityPlannedStartDate}" placeholder="Planned Start Date"
 											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
 									</div>
-									<div class="col-md-3">
+									<div class="col-md-6">
 										<p:calendar value="#{document.activityPlannedEndDate}" placeholder="Planned End Date"
 											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
 									</div>
-									<div class="col-md-3">
+									</div>
+									 <div class="row" >
+									<div class="col-md-6">
 										<p:calendar value="#{document.activityAcutalStartDate}" placeholder="Actual Start Date"
 											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
 									</div>
-									<div class="col-md-3"> 
+									<div class="col-md-6"> 
 										<p:calendar value="#{document.activityActualEndDate}" placeholder="Actual End Date"
 											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
 									</div>
