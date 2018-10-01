@@ -1,6 +1,7 @@
 package com.humbuckers.dto;
 
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.Getter;
@@ -14,6 +15,10 @@ public class ActivitiesDTO {
 	private Long activityType;
 	private Long activityParentId;
 	private List<ActivitiesDTO> activityChildList;
+	private Date activityPlannedStartDate;
+	private Date activityPlannedEndDate;
+	private Date activityAcutalStartDate;
+	private Date activityActualEndDate;
 	
 }
 

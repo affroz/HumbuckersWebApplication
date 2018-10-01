@@ -1,0 +1,97 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
+
+	<ui:define name="content">
+		<style>
+.mydatagrid .ui-grid {
+	background: white !important;
+	border: none !important;
+}
+
+.myhoverimg {
+	float: right;
+	margin-right: 22px;
+	margin-top: 28px;
+}
+.myhover {
+	border: 2px solid #48c7ec;
+	transition: .3s;
+}
+.mycard{
+background-color:#ffffff !Important;
+color:#000000 !Important;
+}
+.mycard p{
+font-size:21px !Important;
+}
+.mycard:hover .myhover {
+	background: #ffffff none repeat scroll 0 0;
+	border: 2px solid transparent;
+	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.our-services-wrapper:hover .services-inner {
+	background: #fff none repeat scroll 0 0;
+	border: 2px solid transparent;
+	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+}
+</style>
+		<h:form prependId="false">
+			<div class="card">
+				<div class="header">
+					<h2 style="color:#87CB16 !important">Projects</h2>
+					<p:commandButton class="btn btn-info btn-fill pull-right"
+						action="#{projectBean.addNewProject}" ajax="false"
+						value="ADD NEW PROJECT">
+					</p:commandButton>
+				</div>
+
+				<div class="content mydatagrid">
+
+					<p:dataGrid var="project" value="#{projectBean.projectList}"
+						columns="3" layout="grid" rows="6" paginator="false"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="6,12,16" emptyMessage="No Projects found">
+
+						<div class="card mycard">
+						 <div class="myhover">
+						    <div class="myhoverimg">
+						    <p:commandLink> <i class="fa fa-search"></i>
+							</p:commandLink>
+									
+								</div>
+							<div class="card-header text-warning">
+								<h3>#{project.projectName}</h3>
+							</div>
+							<div class="card-body">
+								<p class="card-text">
+									<small>Client:</small> #{project.projectClient}
+								</p>
+								<p class="card-text">
+									<small>Main Contractor:</small>
+									#{project.projectMainContractor}
+								</p>
+								<p class="card-text">
+									<small>Interior Designer:</small>
+									#{project.projectInteriorDesigner}
+								</p>
+							</div>
+							</div>
+						</div>
+
+						
+
+					</p:dataGrid>
+
+
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -11,7 +11,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
-import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
@@ -49,12 +48,14 @@ public class ProjectBean implements Serializable {
 	
 	private ActivitiesDTO selectedActivity;
 	private String newactivityname;
+	private String activeIndex;
 
 	@PostConstruct
 	public void init() {
 		activityList=new ArrayList<ActivitiesDTO>();
 		project=new ProjectDTO();
 		projectList=new ArrayList<ProjectDTO>(); 
+		setActiveIndex("0");
 	}
 
 	public String onClickOfMenu() {
@@ -63,13 +64,18 @@ public class ProjectBean implements Serializable {
 		root=createTree();
 		selectedNodes=null;
 		setSelectedActivity(null);
-		return "project.xhtml?faces-redirect=true";
+		setActiveIndex("0");
+		return "projectList.xhtml?faces-redirect=true";
 	}
 
 
 	public String addNewProject() {
 		project=new ProjectDTO();
-		return "projectdetails.xhtml?faces-redirect=true";
+		root=createTree();
+		selectedNodes=null;
+		setSelectedActivity(null);
+		setActiveIndex("0");
+		return "project.xhtml?faces-redirect=true";
 	}
 
 	@SuppressWarnings("unchecked")
@@ -80,6 +86,7 @@ public class ProjectBean implements Serializable {
 
 	@SuppressWarnings("unchecked")
 	public List<ActivitiesDTO> fetchAllActivty(){
+		activityList=new ArrayList<ActivitiesDTO>();
 		List<ActivitiesDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivity");
 		List<ActivitiesDTO> finalList=new ArrayList<>();
 		if(list!=null && list.size()>0) {
@@ -125,10 +132,11 @@ public class ProjectBean implements Serializable {
 
 	public TreeNode createTree() {
 		TreeNode root = new DefaultTreeNode("Activities", null);
-
+		root.setExpanded(true);
 		if(activityList!=null && activityList.size()>0) {
 			for (ActivitiesDTO activitiesDTO : activityList) {
 				TreeNode childnode = new DefaultTreeNode(activitiesDTO,root);
+				childnode.setExpanded(true);
 				if(activitiesDTO.getActivityChildList()!=null && activitiesDTO.getActivityChildList().size()>0) {
 					for (ActivitiesDTO childentity : activitiesDTO.getActivityChildList()) {
 						TreeNode treenode=test(childentity, childnode);
@@ -170,24 +178,15 @@ public class ProjectBean implements Serializable {
 			activitiesDTO.setActivityName(newactivityname);
 			activitiesDTO.setActivityParentId(selectedActivity.getActivityId());
 			activitiesDTO.setActivityType(2L);
-			String id=AbstractRestTemplate.restServiceForObject("/activity/generateActivityKey");
-			activitiesDTO.setActivityId(Long.valueOf(id));
 			
-			activityList.add(activitiesDTO);
-			activityList.remove(selectedActivity);
-			
+			updateOrSaveAct(activitiesDTO);
 			
 			if(selectedActivity.getActivityType()==2L) {
 				selectedActivity.setActivityType(1L);
 			}
-			if(selectedActivity.getActivityChildList()==null){
-				selectedActivity.setActivityChildList(new ArrayList<>());
-			}
-			selectedActivity.getActivityChildList().add(activitiesDTO);
-			activityList.add(selectedActivity);
 			updateOrSaveAct(selectedActivity);
-			updateOrSaveAct(activitiesDTO);
-			
+			activityList=fetchAllActivty();
+				
 			root=createTree();
 			setNewactivityname(null);
 		}
@@ -207,13 +206,20 @@ public class ProjectBean implements Serializable {
 					if(selectedNodes!=null && selectedNodes.length>0) {
 						
 						for (TreeNode node : Arrays.asList(selectedNodes)) {
-							ProjectActivitiesDTO dto=new ProjectActivitiesDTO();
 							ActivitiesDTO act=(ActivitiesDTO) node.getData();
-							dto.setProject(project);
-							dto.setActivities(act);
-							projectActivities.add(dto);
+							if(act!=null && act.getActivityType()==2) {
+								ProjectActivitiesDTO dto=new ProjectActivitiesDTO();
+								dto.setProject(project);
+								dto.setActivities(act);
+								dto.setActivityPlannedStartDate(act.getActivityPlannedStartDate());
+								dto.setActivityPlannedEndDate(act.getActivityPlannedEndDate());
+								dto.setActivityAcutalStartDate(act.getActivityAcutalStartDate());
+								dto.setActivityActualEndDate(act.getActivityActualEndDate());
+								projectActivities.add(dto);
+							}
+							
 						}
-						
+						if(projectActivities!=null && projectActivities.size()>0)
 					    AbstractRestTemplate.postForObject("/project/saveProjectActivitiesList",projectActivities);
 						
 					}
@@ -226,7 +232,7 @@ public class ProjectBean implements Serializable {
 				
 				project=new ProjectDTO();
 				fetchAllProjects();
-				return "project.xhtml?faces-redirect=true";
+				return "projectList.xhtml?faces-redirect=true";
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -251,10 +257,18 @@ public class ProjectBean implements Serializable {
 		return null;
 	}
 	  
-	  public String onFlowProcess(FlowEvent event) {
+	 
+	  
+	 
+	  
+	  public void onClickofNext() {
+	      setActiveIndex("1");
 	        
-	            return event.getNewStep();
+	  }
+	  
+	  public void onClickofBack() {
+	      setActiveIndex("0");
 	        
-	    }
+	  }
 	
 }

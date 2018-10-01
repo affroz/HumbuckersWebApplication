@@ -5,93 +5,80 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
-
 	<ui:define name="content">
+
 		<style>
-.mydatagrid .ui-grid {
-	background: white !important;
-	border: none !important;
+.mycalendar .ui-inputfield, .ui-widget-content .ui-inputfield,
+	.ui-widget-header .ui-inputfield {
+	box-shadow: none !Important;
+	border: none !Important;
+	width: 100% !Important;
+	color: #565656 !Important;
 }
 
-.myhoverimg {
-	float: right;
-	margin-right: 22px;
-	margin-top: 28px;
-}
-.myhover {
-	border: 2px solid #48c7ec;
-	transition: .3s;
-}
-.mycard{
-background-color:#ffffff !Important;
-color:#000000 !Important;
-}
-.mycard p{
-font-size:21px !Important;
-}
-.mycard:hover .myhover {
-	background: #ffffff none repeat scroll 0 0;
-	border: 2px solid transparent;
-	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+.ui-steps .ui-steps-item {
+	width: 24%;
 }
 
-.our-services-wrapper:hover .services-inner {
-	background: #fff none repeat scroll 0 0;
-	border: 2px solid transparent;
-	box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.2);
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-bottom: 30px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 10px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+
+.ui-steps.custom .ui-steps-item.ui-state-highlight .ui-steps-title {
+	color: #555;
+}
+
+.card label
+{
+font-size:14px !important;
+}
+.card .header{
+padding:17px 15px 5px !important;
+}
+
+.card .title {
+    font-weight: 400 !important;
 }
 </style>
-		<h:form prependId="false">
-			<div class="card">
-				<div class="header">
-					<h2 style="color:#87CB16 !important">Projects</h2>
-					<p:commandButton class="btn btn-info btn-fill pull-right"
-						action="AddProject.xhtml " ajax="false"
-						value="ADD NEW PROJECT">
-					</p:commandButton>
-				</div>
-
-				<div class="content mydatagrid">
-
-					<p:dataGrid var="project" value="#{projectBean.projectList}"
-						columns="3" layout="grid" rows="6" paginator="false"
-						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="6,12,16" emptyMessage="No Projects found">
-
-						<div class="card mycard">
-						 <div class="myhover">
-						    <div class="myhoverimg">
-						    <p:commandLink> <i class="fa fa-search"></i>
-							</p:commandLink>
-									
-								</div>
-							<div class="card-header text-warning">
-								<h3>#{project.projectName}</h3>
-							</div>
-							<div class="card-body">
-								<p class="card-text">
-									<small>Client:</small> #{project.projectClient}
-								</p>
-								<p class="card-text">
-									<small>Main Contractor:</small>
-									#{project.projectMainContractor}
-								</p>
-								<p class="card-text">
-									<small>Interior Designer:</small>
-									#{project.projectInteriorDesigner}
-								</p>
-							</div>
-							</div>
-						</div>
-
-						
-
-					</p:dataGrid>
+		<h:form prependId="false" id="projectdetailsform">
+			<p:growl life="30000" sticky="true"></p:growl>
 
 
 
-				</div>
-			</div>
+			<p:steps styleClass="custom" readonly="false" activeIndex="#{projectBean.activeIndex}">
+				<p:menuitem update="projectSteps" />
+				<p:menuitem update="projectSteps" />
+			</p:steps>
+
+			<h:panelGroup id="projectSteps">
+				<h:panelGroup rendered="#{projectBean.activeIndex eq '0'}">
+					<ui:include src="projectdetails.xhtml"></ui:include>
+				</h:panelGroup>
+            <h:panelGroup rendered="#{projectBean.activeIndex eq '1'}">
+					<ui:include src="activities.xhtml"></ui:include>
+				</h:panelGroup>
+			</h:panelGroup>
+
+
 		</h:form>
 	</ui:define>
 </ui:composition>
