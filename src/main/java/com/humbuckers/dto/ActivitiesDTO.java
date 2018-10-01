@@ -10,10 +10,9 @@ import lombok.Setter;
 public class ActivitiesDTO {
 	
 	private Long activityId;
-	private ActivitiesDTO activityParentId;
 	private String activityName;
 	private Long activityType;
-	
+	private Long activityParentId;
 	private List<ActivitiesDTO> activityChildList;
 	
 }

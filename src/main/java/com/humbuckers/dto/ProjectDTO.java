@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ProjectDTO {
 	
-	private Long activityMainId;
+	private Long projectId;
 	private String projectName;
 	private String projectClient;
 	private String projectMainContractor;

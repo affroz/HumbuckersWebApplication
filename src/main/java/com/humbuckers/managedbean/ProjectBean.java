@@ -3,6 +3,7 @@ package com.humbuckers.managedbean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,6 +11,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
+import org.primefaces.event.FlowEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
@@ -19,9 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.humbuckers.dto.ActivitiesDTO;
-import com.humbuckers.dto.ActivityMainDTO;
-import com.humbuckers.dto.ActivitySubTypeDTO;
-import com.humbuckers.dto.ActivityTypeDTO;
+import com.humbuckers.dto.ProjectActivitiesDTO;
 import com.humbuckers.dto.ProjectDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -37,14 +37,7 @@ public class ProjectBean implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
 
 	private ProjectDTO project;
-	private List<ActivitySubTypeDTO>activitysubtypeList;
-
-	private List<ActivityTypeDTO>activitytypeList;
-
-	private List<ActivityMainDTO>activitymainList;
-
-	private List<ActivityTypeDTO> selectedActivity;
-
+	
 	private List<ActivitiesDTO> activityList;
 
 	private List<ProjectDTO>projectList;
@@ -52,25 +45,24 @@ public class ProjectBean implements Serializable {
 	private TreeNode root;
 	
 	private TreeNode[] selectedNodes;
+	
+	
+	private ActivitiesDTO selectedActivity;
+	private String newactivityname;
 
 	@PostConstruct
 	public void init() {
-		activitysubtypeList=new ArrayList<ActivitySubTypeDTO>();
-		activitytypeList=new ArrayList<ActivityTypeDTO>();
-		activitymainList=new ArrayList<ActivityMainDTO>();
 		activityList=new ArrayList<ActivitiesDTO>();
 		project=new ProjectDTO();
 		projectList=new ArrayList<ProjectDTO>(); 
 	}
 
 	public String onClickOfMenu() {
-		//activitysubtypeList=fetchAllActivtySubtype();
-		//activitytypeList=fetchAllActivtytype();
-		//activitymainList=fetchAllActivtyMain();
-		//fetchTypeByMainActivity();
-		activityList=fetchAllActivty();
+	    activityList=fetchAllActivty();
 		fetchAllProjects();
 		root=createTree();
+		selectedNodes=null;
+		setSelectedActivity(null);
 		return "project.xhtml?faces-redirect=true";
 	}
 
@@ -79,91 +71,6 @@ public class ProjectBean implements Serializable {
 		project=new ProjectDTO();
 		return "projectdetails.xhtml?faces-redirect=true";
 	}
-
-
-
-
-
-
-	@SuppressWarnings("unchecked")
-	public List<ActivitySubTypeDTO> fetchAllActivtySubtype(){
-		List<ActivitySubTypeDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivitySubType");
-		return list;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ActivityTypeDTO> fetchAllActivtytype(){
-		List<ActivityTypeDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivityType");
-		return list;
-	}
-
-	@SuppressWarnings("unchecked")
-	public List<ActivityMainDTO> fetchAllActivtyMain(){
-		List<ActivityMainDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllMainActivity");
-		return list;
-	}
-
-
-
-
-	@SuppressWarnings("unchecked")
-	public void fetchTypeByMainActivity(){
-		List<ActivityMainDTO>list=new ArrayList<>();
-		if(activitymainList!=null && activitymainList.size()>0) {
-			for (int j = 0; j < activitymainList.size(); j++) {
-				ObjectMapper mapper = new ObjectMapper();
-				try {
-					Gson gson = new Gson();
-					String jsonString = gson.toJson(activitymainList.get(j));
-					ActivityMainDTO activityMainDTO=mapper.readValue(jsonString,ActivityMainDTO.class);
-					activityMainDTO.setActivityTypeList(AbstractRestTemplate.restServiceForList("/activity/fetchTypeByMainActivity/"+activityMainDTO.getActivityMainId()));
-					list.add(activityMainDTO);
-				} catch (JsonParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JsonMappingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-
-
-			setActivitymainList(new ArrayList<>());
-			activitymainList.addAll(list);
-
-		}
-	}
-
-
-
-	public String saveProject() {
-		if(this.project!=null) {
-
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_INFO,
-								"Project saved successfully",
-								"Project saved successfully"));
-				project=new ProjectDTO();
-				fetchAllProjects();
-				return "project.xhtml?faces-redirect=true";
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				// TODO: handle exception
-			}
-
-		}
-		return null;
-	}
-
-
 
 	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
@@ -176,7 +83,7 @@ public class ProjectBean implements Serializable {
 		List<ActivitiesDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivity");
 		List<ActivitiesDTO> finalList=new ArrayList<>();
 		if(list!=null && list.size()>0) {
-			list=test(list);
+			list=fetchAllList(list);
 			setActivityList(new ArrayList<>());
 			activityList.addAll(finalList);
 		}
@@ -185,9 +92,7 @@ public class ProjectBean implements Serializable {
 	}
 
 
-
-
-	public List<ActivitiesDTO> test(List<ActivitiesDTO> list){
+	public List<ActivitiesDTO> fetchAllList(List<ActivitiesDTO> list){
 		List<ActivitiesDTO> finalList=new ArrayList<>();
 		if(list!=null && list.size()>0) {
 			for (int j = 0; j < list.size(); j++) {
@@ -197,7 +102,7 @@ public class ProjectBean implements Serializable {
 					String jsonString = gson.toJson(list.get(j));
 					ActivitiesDTO entity=mapper.readValue(jsonString,ActivitiesDTO.class);
 					if(entity.getActivityChildList()!=null && entity.getActivityChildList().size()>0) {
-						List<ActivitiesDTO> childList=test(entity.getActivityChildList());
+						List<ActivitiesDTO> childList=fetchAllList(entity.getActivityChildList());
 						entity.setActivityChildList(childList);
 					}
 					finalList.add(entity);
@@ -216,8 +121,6 @@ public class ProjectBean implements Serializable {
 
 		return finalList;
 	}
-
-
 
 
 	public TreeNode createTree() {
@@ -258,5 +161,100 @@ public class ProjectBean implements Serializable {
 		return childnode;
 
 	}
+	
+	
+	public void saveNewActivity() throws JsonParseException, JsonMappingException, IOException {
+		if(selectedActivity!=null && selectedActivity.getActivityId()!=null && newactivityname!=null && !"".equals(newactivityname)) {
+			
+			ActivitiesDTO activitiesDTO=new ActivitiesDTO();
+			activitiesDTO.setActivityName(newactivityname);
+			activitiesDTO.setActivityParentId(selectedActivity.getActivityId());
+			activitiesDTO.setActivityType(2L);
+			String id=AbstractRestTemplate.restServiceForObject("/activity/generateActivityKey");
+			activitiesDTO.setActivityId(Long.valueOf(id));
+			
+			activityList.add(activitiesDTO);
+			activityList.remove(selectedActivity);
+			
+			
+			if(selectedActivity.getActivityType()==2L) {
+				selectedActivity.setActivityType(1L);
+			}
+			if(selectedActivity.getActivityChildList()==null){
+				selectedActivity.setActivityChildList(new ArrayList<>());
+			}
+			selectedActivity.getActivityChildList().add(activitiesDTO);
+			activityList.add(selectedActivity);
+			updateOrSaveAct(selectedActivity);
+			updateOrSaveAct(activitiesDTO);
+			
+			root=createTree();
+			setNewactivityname(null);
+		}
+	}
+	
+	
 
+
+	public String saveProject() {
+		if(this.project!=null) {
+
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
+				if(project.getProjectId()!=null) {
+					List<ProjectActivitiesDTO>projectActivities=new ArrayList<>();
+					if(selectedNodes!=null && selectedNodes.length>0) {
+						
+						for (TreeNode node : Arrays.asList(selectedNodes)) {
+							ProjectActivitiesDTO dto=new ProjectActivitiesDTO();
+							ActivitiesDTO act=(ActivitiesDTO) node.getData();
+							dto.setProject(project);
+							dto.setActivities(act);
+							projectActivities.add(dto);
+						}
+						
+					    AbstractRestTemplate.postForObject("/project/saveProjectActivitiesList",projectActivities);
+						
+					}
+				}
+				FacesContext.getCurrentInstance().addMessage(
+						null,
+						new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Project saved successfully",
+								"Project saved successfully"));
+				
+				project=new ProjectDTO();
+				fetchAllProjects();
+				return "project.xhtml?faces-redirect=true";
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				// TODO: handle exception
+			}
+
+		}
+		return null;
+	}
+	
+	
+	  public ActivitiesDTO updateOrSaveAct(ActivitiesDTO act){
+		   try {
+			   ObjectMapper mapper = new ObjectMapper();
+			   act = mapper.readValue(AbstractRestTemplate.postForObject("/activity/updateActivity",act),ActivitiesDTO.class);
+			   return act;
+		   }
+		   catch (Exception e) {
+			   e.printStackTrace();
+			// TODO: handle exception
+		}
+		return null;
+	}
+	  
+	  public String onFlowProcess(FlowEvent event) {
+	        
+	            return event.getNewStep();
+	        
+	    }
+	
 }
