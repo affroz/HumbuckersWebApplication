@@ -295,18 +295,7 @@ public class ActivityBean implements Serializable {
 
 	}
 	
-	
-/*	private boolean checkObjectExists(List<ActivitiesDTO> activities,ActivitiesDTO entity) {
-		for (ActivitiesDTO activitiesDTO : activities) {
-			if(activitiesDTO.getActivityId().equals(entity.getActivityId())) {
-				return true;
-			}
-		}
-		
-		return false;
-		
-	}*/
-	
+
 	private ActivitiesDTO checkObjectExists(List<ActivitiesDTO> activities,ActivitiesDTO dto) {
 		for (ActivitiesDTO entity : activities) {
 			if(entity.getActivityId().equals(dto.getActivityId())) {
@@ -322,5 +311,5 @@ public class ActivityBean implements Serializable {
 		return dto;
 		
 	}
-
+	
 }

@@ -87,10 +87,10 @@
 											target="#{projectBean.projectId}" />
 										<i class="pe-7s-pen"></i>
 									</p:commandLink> </div>
-								<div class="row"><p:commandLink action="#{projectBean.editProject}"
-										update="message" class="pull-right" >
-										<f:setPropertyActionListener value="#{project.projectId}"
+								<div class="row"><p:commandLink  class="pull-right" action="#{projectBean.viewProject}">
+								<f:setPropertyActionListener value="#{project.projectId}"
 											target="#{projectBean.projectId}" />
+									
 										<i class="pe-7s-look"></i>
 									</p:commandLink> </div>
 								
