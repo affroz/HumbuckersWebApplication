@@ -19,6 +19,8 @@ public class ActivitiesDTO {
 	private Date activityPlannedEndDate;
 	private Date activityAcutalStartDate;
 	private Date activityActualEndDate;
+	private String exist;
+	private String checkbox;
 	
 }
 

@@ -8,6 +8,9 @@
 
 	<ui:define name="content">
 		<style>
+		.ui-widget .ui-widget {
+    font-size: 1.4em;
+}
 .mydatagrid .ui-grid {
 	background: white !important;
 	border: none !important;
@@ -15,8 +18,8 @@
 
 .myhoverimg {
 	float: right;
-	margin-right: 22px;
-	margin-top: 28px;
+	margin-right: 28px;
+	margin-top: 13px;
 }
 
 .myhover {
@@ -78,13 +81,22 @@
 						<div class="card mycard">
 							<div class="myhover">
 								<div class="myhoverimg">
-								
-								<p:commandLink action="#{projectBean.editProject}"
+								<div class="row"><p:commandLink action="#{projectBean.editProject}"
 										update="message" class="pull-right" >
 										<f:setPropertyActionListener value="#{project.projectId}"
 											target="#{projectBean.projectId}" />
-										<i class="fa fa-search"></i>
-									</p:commandLink>
+										<i class="pe-7s-pen"></i>
+									</p:commandLink> </div>
+								<div class="row"><p:commandLink action="#{projectBean.editProject}"
+										update="message" class="pull-right" >
+										<f:setPropertyActionListener value="#{project.projectId}"
+											target="#{projectBean.projectId}" />
+										<i class="pe-7s-look"></i>
+									</p:commandLink> </div>
+								
+									
+									
+									
 								
 
 								</div>

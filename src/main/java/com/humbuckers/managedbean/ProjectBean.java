@@ -12,6 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.SelectEvent;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
 
@@ -106,6 +108,7 @@ public class ProjectBean implements Serializable {
 				ObjectMapper mapper = new ObjectMapper();
 				project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
 				if(project.getProjectId()!=null) {
+					AbstractRestTemplate.restServiceForObject("/project/deleteProjectActivityByProject/"+project.getProjectId());
 					List<ProjectActivitiesDTO>projectActivities=new ArrayList<>();
 					if(activityBean.getSelectedNodes()!=null && activityBean.getSelectedNodes().length>0) {
 						
@@ -135,7 +138,7 @@ public class ProjectBean implements Serializable {
 								"Project saved successfully"));
 				
 				project=new ProjectDTO();
-				fetchAllProjects();
+				onClickOfMenu();
 				return "projectList.xhtml?faces-redirect=true";
 			}
 			catch (Exception e) {
@@ -151,15 +154,17 @@ public class ProjectBean implements Serializable {
 	}
 	
 	private void fetchActivityByProjectActivities(List<ProjectActivitiesDTO> projectActivities) {
-		int i=0;
-		TreeNode[] selectedNodes = null;
+		List<ActivitiesDTO> activities=new ArrayList<>();
 		for (ProjectActivitiesDTO projectActivitiesDTO : projectActivities) {
 			ObjectMapper mapper = new ObjectMapper();
 			try {
-				ActivitiesDTO activity = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey()),ActivitiesDTO.class);
-				TreeNode act=(TreeNode) activity;
-				selectedNodes[i]=act;
-				i++;
+				ActivitiesDTO dto = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey()),ActivitiesDTO.class);
+				dto.setActivityPlannedStartDate(projectActivitiesDTO.getActivityPlannedStartDate());
+				dto.setActivityPlannedEndDate(projectActivitiesDTO.getActivityPlannedEndDate());
+				dto.setActivityAcutalStartDate(projectActivitiesDTO.getActivityAcutalStartDate());
+				dto.setActivityActualEndDate(projectActivitiesDTO.getActivityActualEndDate());
+				activities.add(dto);
+				
 			} catch (IOException e) {
 				FacesContext.getCurrentInstance().addMessage(
 						null,
@@ -169,9 +174,13 @@ public class ProjectBean implements Serializable {
 			}
 			
 		}
-		activityBean.setSelectedNodes(selectedNodes);
+		if(activities!=null && activities.size()>0) {
+			activityBean.setRoot(activityBean.createTree(activities));
+			TreeNode[] selectedNodes = new TreeNode[activityBean.getSelectedNodesList().size()];
+			activityBean.setSelectedNodes(activityBean.getSelectedNodesList().toArray(selectedNodes));
+		}
 		
 	}
-	 
+		 
 	
 }
