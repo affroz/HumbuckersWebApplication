@@ -7,6 +7,10 @@
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
 	<ui:define name="content">
 		<style>
+		
+		.myTable td:nth-child(1) {
+    width: 20px;
+}
 </style>
 		<h:form prependId="false">
 
@@ -118,41 +122,67 @@
 				</p:tab>
 				<p:tab title="Project Activities">
 					<p:treeTable value="#{projectBean.projectActivityBean.root}"
-						var="document" id="treeId">
+						var="document" id="treeId" styleClass="myTable">
 
-						<p:column headerText="Activities">
+					
+					<p:columnGroup type="header">
+            <p:row>
+                 <p:column rowspan="2" colspan="3" headerText="Activities" />
+                 <p:column colspan="2" headerText="Planned Dates" />
+                <p:column colspan="2" headerText="Actual Dates" />
+                <p:column rowspan="2"  headerText="Remark" />
+            </p:row>
+            
+            
+            
+            <p:row>
+                <p:column headerText="Start Date" />
+                <p:column headerText="End Date" />  
+                <p:column headerText="Start Date" />
+                <p:column headerText="End Date" />
+            </p:row>
+        </p:columnGroup>
+					
+					
+					
+						<p:column colspan="3">
 							<p:outputLabel value="#{document.name}" />
 						</p:column>
-						<p:column headerText="Planned Start Date">
+						<p:column>
 
 							<p:outputLabel value="#{document.activityPlannedStartDate}"
-								class="form-control " />
+								class="form-control " ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></p:outputLabel>
 
 
 						</p:column>
-						<p:column  headerText="Planned End Date">
+						<p:column>
 
 							<p:outputLabel value="#{document.activityPlannedEndDate}"
-								class="form-control " />
+								class="form-control " ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></p:outputLabel>
 
 
 						</p:column>
-						<p:column  headerText="Actual End Date">
+						<p:column>
 
 							<p:outputLabel value="#{document.activityAcutalStartDate}"
-								class="form-control " />
+								class="form-control " ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></p:outputLabel>
 
 
 						</p:column>
-						<p:column  headerText="Actual End Date">
+						<p:column>
 
 							<p:outputLabel value="#{document.activityActualEndDate}"
-								class="form-control " />
+								class="form-control " ><f:convertDateTime type="date" pattern="dd-MM-yyyy"/></p:outputLabel>
 
 
 						</p:column>
 
+<p:column>
 
+							
+
+
+						</p:column>
 
 
 					</p:treeTable>
