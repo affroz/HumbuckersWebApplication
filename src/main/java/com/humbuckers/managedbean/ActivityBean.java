@@ -275,7 +275,12 @@ public class ActivityBean implements Serializable {
 		TreeNode childnode = new DefaultTreeNode(obj,node);
 		if(obj.getActivityChildList()!=null && obj.getActivityChildList().size()>0) {
 			for (ActivitiesDTO childentity : obj.getActivityChildList()) {
+				childentity=checkObjectExists(activities, childentity);
 				TreeNode child=new DefaultTreeNode(childentity,childnode);
+				if("A".equals(childentity.getExist())) {
+					child.setSelected(true);
+					selectedNodesList.add(child);
+				}
 				if(childentity.getActivityChildList()!=null && childentity.getActivityChildList().size()>0) {
 					for (ActivitiesDTO entity : childentity.getActivityChildList()) {
 						entity=checkObjectExists(activities, entity);

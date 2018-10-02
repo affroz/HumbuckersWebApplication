@@ -3,6 +3,7 @@ package com.humbuckers.managedbean;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,6 +13,8 @@ import javax.inject.Named;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.timeline.TimelineEvent;
+import org.primefaces.model.timeline.TimelineModel;
 import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,15 +37,31 @@ public class ProjectActivityBean implements Serializable {
 
 
 	private TreeNode root;
-
+	private TimelineModel basicmodel;
+	private TimelineModel rangemodel;
+    private boolean selectable = true;
+    private boolean zoomable = true;
+    private boolean moveable = true;
+    private boolean stackEvents = true;
+    private String eventStyle = "box";
+    private boolean axisOnTop;
+    private boolean showCurrentTime = true;
+    private boolean showNavigation = false;
+    private Date start;  
+    private Date end; 
+    
+    
 	@PostConstruct
 	public void init() {
+		basicmodel = new TimelineModel();
+		rangemodel=new TimelineModel();
 		
 	}
 
 	
 	public TreeNode createTreeStucture(Long projectKey)
-	{
+	{	basicmodel = new TimelineModel();
+	    rangemodel=new TimelineModel();
 		List<ProjectActivitiesDTO> list=fetchProjectActivitiesMainByProject("/project/fetchMainActivitiesByProject/"+projectKey);
 		TreeNode root = new DefaultTreeNode("Activities", null);
 		root.setExpanded(true);
@@ -59,12 +78,11 @@ public class ProjectActivityBean implements Serializable {
 				    act.setActivityPlannedEndDate(entity.getActivityPlannedEndDate());
 				    act.setActivityAcutalStartDate(entity.getActivityAcutalStartDate());
 				    act.setActivityActualEndDate(entity.getActivityActualEndDate());
-				   
+				    setStart(entity.getActivityPlannedStartDate());
+				    setEnd(entity.getActivityPlannedEndDate());
 				    TreeNode parentNode = new DefaultTreeNode(act,root);
 				    parentNode.setExpanded(true);
-				
 				    test(entity, parentNode);
-				
 				
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -92,7 +110,9 @@ public class ProjectActivityBean implements Serializable {
 				
 				TreeNode subNode = new DefaultTreeNode(subact,node);
 				subNode.setExpanded(true);
-				
+				rangemodel.add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate(), subentity.getActivityPlannedEndDate(),
+						true, subdto.getActivityName(), subdto.getActivityName()));
+				basicmodel.add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate()));
 				if(subdto.getActivityType()!=2) {
 					test(subentity, subNode);
 				}
