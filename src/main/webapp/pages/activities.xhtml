@@ -25,8 +25,6 @@
 						selectionMode="checkbox" selection="#{projectBean.activityBean.selectedNodes}" 
 						id="treeId" >
 						
-						<p:ajax event="select" listener="#{projectBean.onRowSelect}" update="@form,:treeId,treeId"
-                                />
 						<p:column headerText="Select Activities">
                             <p:outputLabel value="#{document.activityName}" />
 								
