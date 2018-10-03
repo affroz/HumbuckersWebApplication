@@ -20,6 +20,8 @@ public class ProjectActivitiesDTO {
 	private String remark;
 	private Long parentActvityKey;
 	private Long activityTypeCode;
+	private String weightage;
+	private String noOfDays;
 }
 
 

@@ -38,6 +38,9 @@ public class ProjectBean implements Serializable {
 	@Inject
 	private ProjectActivityBean projectActivityBean;
 	
+	@Inject
+	private ProjectWeightageBean projectWeightageBean;
+	
 	private ProjectDTO project;
 	
 	private List<ProjectDTO>projectList;
@@ -94,6 +97,7 @@ public class ProjectBean implements Serializable {
 			project = mapper.readValue(AbstractRestTemplate.restServiceForObject("/project/fetchProjectById/"+projectId),ProjectDTO.class);
 			setActiveIndex("0");
 			projectActivityBean.setRoot(projectActivityBean.createTreeStucture(projectId)); 
+			projectWeightageBean.calaculateWeightage(projectId);
 			return "projectViewMain.xhtml?faces-redirect=true";
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(
@@ -139,6 +143,10 @@ public class ProjectBean implements Serializable {
 								dto.setActivityKey(act.getActivityId());
 								dto.setActivityPlannedStartDate(act.getActivityPlannedStartDate());
 								dto.setActivityPlannedEndDate(act.getActivityPlannedEndDate());
+								if(act.getActivityPlannedStartDate()!=null && act.getActivityPlannedEndDate()!=null) {
+									Long days =((act.getActivityPlannedEndDate().getTime() - act.getActivityPlannedStartDate().getTime()) / (1000 * 60 * 60 * 24));
+									dto.setNoOfDays(days.toString());
+								}
 								dto.setActivityAcutalStartDate(act.getActivityAcutalStartDate());
 								dto.setActivityActualEndDate(act.getActivityActualEndDate());
 								dto.setActivityTypeCode(act.getActivityType());
@@ -233,34 +241,7 @@ public class ProjectBean implements Serializable {
 	
 	
 	
-	private void fetchActivityByProjectActivities1(List<ProjectActivitiesDTO> projectActivities) {
-		List<ActivitiesDTO> activities=new ArrayList<>();
-		for (ProjectActivitiesDTO projectActivitiesDTO : projectActivities) {
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				ActivitiesDTO dto = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey()),ActivitiesDTO.class);
-				dto.setActivityPlannedStartDate(projectActivitiesDTO.getActivityPlannedStartDate());
-				dto.setActivityPlannedEndDate(projectActivitiesDTO.getActivityPlannedEndDate());
-				dto.setActivityAcutalStartDate(projectActivitiesDTO.getActivityAcutalStartDate());
-				dto.setActivityActualEndDate(projectActivitiesDTO.getActivityActualEndDate());
-				activities.add(dto);
-				
-			} catch (IOException e) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Something went wrong!!",
-								"Something went wrong!!"));
-			}
-			
-		}
-		if(activities!=null && activities.size()>0) {
-			activityBean.setRoot(activityBean.createTree(activities));
-			TreeNode[] selectedNodes = new TreeNode[activityBean.getSelectedNodesList().size()];
-			activityBean.setSelectedNodes(activityBean.getSelectedNodesList().toArray(selectedNodes));
-		}
-		
-	}
+	
 		 
 	
 }

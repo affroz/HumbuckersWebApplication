@@ -38,12 +38,14 @@ public class ProjectActivityBean implements Serializable {
 
 	private TreeNode root;
 
+	private String style;
 	@Inject
 	private ProjectReportBean projectReportBean;
     
     
 	@PostConstruct
 	public void init() {
+		style="one";
 	}
 
 	
@@ -98,8 +100,17 @@ public class ProjectActivityBean implements Serializable {
 				
 				TreeNode subNode = new DefaultTreeNode(subact,node);
 				subNode.setExpanded(true);
+				if(style.equals("one")) {
+					setStyle("two");
+				}
+				else if(style.equals("two")) {
+					setStyle("three");
+				}
+				else if(style.equals("three")) {
+					setStyle("one");
+				}
 				projectReportBean.getRangemodel().add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate(), subentity.getActivityPlannedEndDate(),
-						true, subdto.getActivityName(), subdto.getActivityName()));
+						true, subdto.getActivityName(),style));
 				projectReportBean.getBasicmodel().add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate()));
 				if(subdto.getActivityType()!=2) {
 					test(subentity, subNode);
