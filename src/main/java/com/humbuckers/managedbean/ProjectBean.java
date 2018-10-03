@@ -59,14 +59,14 @@ public class ProjectBean implements Serializable {
 		fetchAllProjects();
 		activityBean.onClickOfMenu();
 		setActiveIndex("0");
-		return "projectList.xhtml?faces-redirect=true";
+		return "projectListMain.xhtml?faces-redirect=true";
 	}
 
 	public String addNewProject() {
 		project=new ProjectDTO();
 		activityBean.addNewProject();
 		setActiveIndex("0");
-		return "project.xhtml?faces-redirect=true";
+		return "projectAddOrEditMain.xhtml?faces-redirect=true";
 	}
 	
 	public String editProject() {
@@ -76,7 +76,7 @@ public class ProjectBean implements Serializable {
 			setActiveIndex("0");
 			activityBean.setProjectActivities(activityBean.fetchProjectActivitiesByProject(projectId));
 			fetchActivityByProjectActivities(activityBean.getProjectActivities());
-			return "project.xhtml?faces-redirect=true";
+			return "projectAddOrEditMain.xhtml?faces-redirect=true";
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -94,7 +94,7 @@ public class ProjectBean implements Serializable {
 			project = mapper.readValue(AbstractRestTemplate.restServiceForObject("/project/fetchProjectById/"+projectId),ProjectDTO.class);
 			setActiveIndex("0");
 			projectActivityBean.setRoot(projectActivityBean.createTreeStucture(projectId)); 
-			return "projectView.xhtml?faces-redirect=true";
+			return "projectViewMain.xhtml?faces-redirect=true";
 		} catch (IOException e) {
 			FacesContext.getCurrentInstance().addMessage(
 					null,
@@ -161,7 +161,7 @@ public class ProjectBean implements Serializable {
 				
 				project=new ProjectDTO();
 				onClickOfMenu();
-				return "projectList.xhtml?faces-redirect=true";
+				return "projectListMain.xhtml?faces-redirect=true";
 			}
 			catch (Exception e) {
 				FacesContext.getCurrentInstance().addMessage(
