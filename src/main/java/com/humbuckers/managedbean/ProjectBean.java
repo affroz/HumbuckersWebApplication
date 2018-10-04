@@ -1,6 +1,5 @@
 package com.humbuckers.managedbean;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +14,6 @@ import javax.inject.Named;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.humbuckers.dto.ActivitiesDTO;
 import com.humbuckers.dto.ProjectActivitiesDTO;
 import com.humbuckers.dto.ProjectDTO;
@@ -73,41 +71,19 @@ public class ProjectBean implements Serializable {
 	}
 	
 	public String editProject() {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			project = mapper.readValue(AbstractRestTemplate.restServiceForObject("/project/fetchProjectById/"+projectId),ProjectDTO.class);
-			setActiveIndex("0");
-			activityBean.setProjectActivities(activityBean.fetchProjectActivitiesByProject(projectId));
-			fetchActivityByProjectActivities(activityBean.getProjectActivities());
-			return "projectAddOrEditMain.xhtml?faces-redirect=true";
-		} catch (IOException e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Something went wrong!!",
-							"Something went wrong!!"));
-		}
-		return "";
-	
+		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
+		setActiveIndex("0");
+		activityBean.setProjectActivities(activityBean.fetchProjectActivitiesByProject(projectId));
+		fetchActivityByProjectActivities(activityBean.getProjectActivities());
+		return "projectAddOrEditMain.xhtml?faces-redirect=true";
 	}
 	
 	public String viewProject() {
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			project = mapper.readValue(AbstractRestTemplate.restServiceForObject("/project/fetchProjectById/"+projectId),ProjectDTO.class);
-			setActiveIndex("0");
-			projectActivityBean.setRoot(projectActivityBean.createTreeStucture(projectId)); 
-			projectWeightageBean.calaculateWeightage(projectId);
-			return "projectViewMain.xhtml?faces-redirect=true";
-		} catch (IOException e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Something went wrong!!",
-							"Something went wrong!!"));
-		}
-		return "";
-	
+		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
+		setActiveIndex("0");
+		projectActivityBean.setRoot(projectActivityBean.createTreeStucture(projectId)); 
+		projectWeightageBean.calaculateWeightage(projectId);
+		return "projectViewMain.xhtml?faces-redirect=true";
 	}
 
 	public void onClickofNext() {
@@ -120,20 +96,17 @@ public class ProjectBean implements Serializable {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	public void fetchAllProjects() {
-		projectList=AbstractRestTemplate.restServiceForList("/project/fetchAllProjects");
+		projectList=AbstractRestTemplate.fetchObjectList("/project/fetchAllProjects",ProjectDTO.class);
 	}
 
 	public String saveProject() {
 		if(this.project!=null) {
 			projectActivitiesList=new ArrayList<>();
 
-			try {
-				ObjectMapper mapper = new ObjectMapper();
-				project = mapper.readValue(AbstractRestTemplate.postForObject("/project/saveProject",project),ProjectDTO.class);
+				project =(ProjectDTO) AbstractRestTemplate.postObject("/project/saveProject",project,ProjectDTO.class);
 				if(project.getProjectId()!=null) {
-					AbstractRestTemplate.restServiceForObject("/project/deleteProjectActivityByProject/"+project.getProjectId());
+					AbstractRestTemplate.fetchObject("/project/deleteProjectActivityByProject/"+project.getProjectId(), ProjectDTO.class);
 					if(activityBean.getSelectedNodes()!=null && activityBean.getSelectedNodes().length>0) {
 						for (TreeNode node : Arrays.asList(activityBean.getSelectedNodes())) {
 							ActivitiesDTO act=(ActivitiesDTO) node.getData();
@@ -157,8 +130,7 @@ public class ProjectBean implements Serializable {
 							
 						}
 						if(projectActivitiesList!=null && projectActivitiesList.size()>0)
-					    AbstractRestTemplate.postForObject("/project/saveProjectActivitiesList",projectActivitiesList);
-						
+							AbstractRestTemplate.postObject("/project/saveProjectActivitiesList",projectActivitiesList,ProjectActivitiesDTO.class);
 					}
 				}
 				FacesContext.getCurrentInstance().addMessage(
@@ -170,64 +142,33 @@ public class ProjectBean implements Serializable {
 				project=new ProjectDTO();
 				onClickOfMenu();
 				return "projectListMain.xhtml?faces-redirect=true";
-			}
-			catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Something went wrong!!",
-								"Something went wrong!!"));
-			}
-
+			
 		}
 		return null;
 	}
 	
-	
-	
-	
-	
 	private void addParentObj(Long key) {
-		ObjectMapper mapper = new ObjectMapper();
-		ActivitiesDTO act;
-		try {
-			act = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+key),ActivitiesDTO.class);
-			ProjectActivitiesDTO dto=new ProjectActivitiesDTO();
-			dto.setActivityKey(act.getActivityId());
-			dto.setActivityTypeCode(act.getActivityType());
-			dto.setParentActvityKey(act.getActivityParentId());
-			dto.setProjectKey(project.getProjectId());
-			projectActivitiesList.add(dto);
-			if(dto.getActivityTypeCode()!=0) {
-				addParentObj(dto.getParentActvityKey());
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    ActivitiesDTO act =(ActivitiesDTO) AbstractRestTemplate.fetchObject("/activity/fetchactivity/"+key, ActivitiesDTO.class);
+		ProjectActivitiesDTO dto=new ProjectActivitiesDTO();
+		dto.setActivityKey(act.getActivityId());
+		dto.setActivityTypeCode(act.getActivityType());
+		dto.setParentActvityKey(act.getActivityParentId());
+		dto.setProjectKey(project.getProjectId());
+		projectActivitiesList.add(dto);
+		if(dto.getActivityTypeCode()!=0) {
+			addParentObj(dto.getParentActvityKey());
 		}
-
-		
 	}
 	
 	private void fetchActivityByProjectActivities(List<ProjectActivitiesDTO> projectActivities) {
 		List<ActivitiesDTO> activities=new ArrayList<>();
 		for (ProjectActivitiesDTO projectActivitiesDTO : projectActivities) {
-			ObjectMapper mapper = new ObjectMapper();
-			try {
-				ActivitiesDTO dto = mapper.readValue(AbstractRestTemplate.restServiceForObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey()),ActivitiesDTO.class);
-				dto.setActivityPlannedStartDate(projectActivitiesDTO.getActivityPlannedStartDate());
-				dto.setActivityPlannedEndDate(projectActivitiesDTO.getActivityPlannedEndDate());
-				dto.setActivityAcutalStartDate(projectActivitiesDTO.getActivityAcutalStartDate());
-				dto.setActivityActualEndDate(projectActivitiesDTO.getActivityActualEndDate());
-				activities.add(dto);
-				
-			} catch (IOException e) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Something went wrong!!",
-								"Something went wrong!!"));
-			}
+			ActivitiesDTO dto = (ActivitiesDTO) AbstractRestTemplate.fetchObject("/activity/fetchactivity/"+projectActivitiesDTO.getActivityKey(), ActivitiesDTO.class);
+			dto.setActivityPlannedStartDate(projectActivitiesDTO.getActivityPlannedStartDate());
+			dto.setActivityPlannedEndDate(projectActivitiesDTO.getActivityPlannedEndDate());
+			dto.setActivityAcutalStartDate(projectActivitiesDTO.getActivityAcutalStartDate());
+			dto.setActivityActualEndDate(projectActivitiesDTO.getActivityActualEndDate());
+			activities.add(dto);
 			
 		}
 		if(activities!=null && activities.size()>0) {

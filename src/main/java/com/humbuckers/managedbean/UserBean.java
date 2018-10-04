@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.primefaces.event.RowEditEvent;
@@ -15,8 +14,6 @@ import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.humbuckers.dto.UsersDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -44,20 +41,14 @@ public class UserBean implements Serializable {
 		return "userslist.xhtml?faces-redirect=true";
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<UsersDTO> fetchAllUsers(){
-	     List<UsersDTO> user = AbstractRestTemplate.restServiceForList("/users/fetchAllUsers");
+	     List<UsersDTO> user = AbstractRestTemplate.fetchObjectList("/users/fetchAllUsers",UsersDTO.class);
 	     return user;
 	}
 	
 	
-	public String onRowEdit(RowEditEvent event) throws JsonParseException, JsonMappingException, IOException {
-		Object selectedUserObj=event.getObject();
-		ObjectMapper mapper = new ObjectMapper();
-		Gson gson = new Gson();
-		String jsonInString = gson.toJson(selectedUserObj);
-		UsersDTO selectedUser = mapper.readValue(jsonInString, UsersDTO.class);
-		
+	public String onRowEdit(RowEditEvent event) {
+		UsersDTO selectedUser=(UsersDTO) event.getObject();
 		if(selectedUser!=null && selectedUser.getUserId()!=null) {
 			selectedUser=updateUser(selectedUser);
 			new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -74,19 +65,8 @@ public class UserBean implements Serializable {
     
     
     public UsersDTO updateUser(UsersDTO user){
-		   try {
-			   ObjectMapper mapper = new ObjectMapper();
-			   user = mapper.readValue(AbstractRestTemplate.postForObject("/users/updateUser",user),UsersDTO.class);
-			   return user;
-		   }
-		   catch (Exception e) {
-				FacesContext.getCurrentInstance().addMessage(
-						null,
-						new FacesMessage(FacesMessage.SEVERITY_ERROR,
-								"Something went wrong!!",
-								"Something went wrong!!"));
-		}
-		return null;
+	   user = (UsersDTO) AbstractRestTemplate.postObject("/users/updateUser",user,UsersDTO.class);
+	   return user;
 	}
 	
 }

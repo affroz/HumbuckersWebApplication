@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
 
 import org.primefaces.model.DefaultTreeNode;
@@ -16,8 +14,6 @@ import org.springframework.context.annotation.Scope;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 import com.humbuckers.dto.ActivitiesDTO;
 import com.humbuckers.dto.ProjectActivitiesDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
@@ -78,48 +74,13 @@ public class ActivityBean implements Serializable {
 	}
 	
 
-	@SuppressWarnings("unchecked")
 	public List<ActivitiesDTO> fetchAllActivty(){
 		activityList=new ArrayList<ActivitiesDTO>();
-		List<ActivitiesDTO> list = AbstractRestTemplate.restServiceForList("/activity/fetchAllActivity");
-		List<ActivitiesDTO> finalList=new ArrayList<>();
-		if(list!=null && list.size()>0) {
-			list=fetchAllList(list);
-			setActivityList(new ArrayList<>());
-			activityList.addAll(finalList);
-		}
-
-		return list;
+		activityList=AbstractRestTemplate.fetchObjectList("/activity/fetchAllActivity",ActivitiesDTO.class);
+		return activityList;
 	}
 
-
-	public List<ActivitiesDTO> fetchAllList(List<ActivitiesDTO> list){
-		List<ActivitiesDTO> finalList=new ArrayList<>();
-		if(list!=null && list.size()>0) {
-			for (int j = 0; j < list.size(); j++) {
-				ObjectMapper mapper = new ObjectMapper();
-				try {
-					Gson gson = new Gson();
-					String jsonString = gson.toJson(list.get(j));
-					ActivitiesDTO entity=mapper.readValue(jsonString,ActivitiesDTO.class);
-					if(entity.getActivityChildList()!=null && entity.getActivityChildList().size()>0) {
-						List<ActivitiesDTO> childList=fetchAllList(entity.getActivityChildList());
-						entity.setActivityChildList(childList);
-					}
-					finalList.add(entity);
-				} catch (IOException e) {
-					FacesContext.getCurrentInstance().addMessage(
-							null,
-							new FacesMessage(FacesMessage.SEVERITY_ERROR,
-									"Something went wrong!!",
-									"Something went wrong!!"));
-				}
-			}
-		}
-
-		return finalList;
-	}
-
+	
 
 	public TreeNode createTree() {
 		TreeNode root = new DefaultTreeNode("Activities", null);
@@ -187,50 +148,14 @@ public class ActivityBean implements Serializable {
 
 
 	public ActivitiesDTO updateOrSaveAct(ActivitiesDTO act){
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			act = mapper.readValue(AbstractRestTemplate.postForObject("/activity/updateActivity",act),ActivitiesDTO.class);
-			return act;
-		}
-		catch (Exception e) {
-			FacesContext.getCurrentInstance().addMessage(
-					null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR,
-							"Something went wrong!!",
-							"Something went wrong!!"));
-		}
-		return null;
+		act=(ActivitiesDTO) AbstractRestTemplate.postObject("/activity/updateActivity",act,ActivitiesDTO.class);
+		return act;
 	}
 
 	
 	
 	public List<ProjectActivitiesDTO> fetchProjectActivitiesByProject(Long projectKey){
-		List<ProjectActivitiesDTO> list=AbstractRestTemplate.restServiceForList("/project/fetchProjectActivityByProject/"+projectKey);
-		List<ProjectActivitiesDTO> finalList=fetchAllProjectActivities(list);
-		return finalList;
-		
-	}
-	
-	public List<ProjectActivitiesDTO> fetchAllProjectActivities(List<ProjectActivitiesDTO> list){
-		List<ProjectActivitiesDTO> finalList=new ArrayList<>();
-		if(list!=null && list.size()>0) {
-			for (int j = 0; j < list.size(); j++) {
-				ObjectMapper mapper = new ObjectMapper();
-				try {
-					Gson gson = new Gson();
-					String jsonString = gson.toJson(list.get(j));
-					ProjectActivitiesDTO entity=mapper.readValue(jsonString,ProjectActivitiesDTO.class);
-					finalList.add(entity);
-				} catch (IOException e) {
-					FacesContext.getCurrentInstance().addMessage(
-							null,
-							new FacesMessage(FacesMessage.SEVERITY_ERROR,
-									"Something went wrong!!",
-									"Something went wrong!!"));
-				}
-			}
-		}
-
+		List<ProjectActivitiesDTO> finalList=AbstractRestTemplate.fetchObjectList("/project/fetchProjectActivityByProject/"+projectKey,ProjectActivitiesDTO.class);
 		return finalList;
 	}
 	
