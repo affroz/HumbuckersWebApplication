@@ -13,6 +13,12 @@
 	<script
 		src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/jquery-1.11.1.min.js"></script>
+	<style>
+	
+	.preloader-div{    width: 100% !important;
+    top: 25% !important;
+        text-align: center;}	
+	</style>
 </h:head>
 
 <h:body>
@@ -90,6 +96,17 @@
 			</div>
 
 		</div>
+		
+		<p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+           <f:facet name="start">
+               <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"/>
+           </f:facet>
+       </p:ajaxStatus>
+
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <p:dialog widgetVar="statusDialog" styleClass="preloader-div" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" style="background: transparent;border: none;box-shadow: none;">
+            <img src="resources/images/loader.gif" />
+        </p:dialog>
 	</section>
 </h:body>
 </html>
