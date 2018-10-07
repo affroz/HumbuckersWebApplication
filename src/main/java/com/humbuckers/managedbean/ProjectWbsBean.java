@@ -11,6 +11,7 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
 
+import com.humbuckers.dto.ProjectDTO;
 import com.humbuckers.dto.ProjectWbsDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -49,20 +50,20 @@ public class ProjectWbsBean implements Serializable {
 	}
 	
 	public void addActivityNode() {
-		projectWbsDTO.setActivity("A");
+		projectWbsDTO.setActivityCode(1L);
 		new DefaultTreeNode(projectWbsDTO,selectedNode);
 		setProjectWbsDTO(new ProjectWbsDTO());
 	}
 	
 	public void addToList(TreeNode node, Long projectKey) {
 		ProjectWbsDTO dto=(ProjectWbsDTO) node.getData();
-		dto.setActivityId(fetchMaxWbsId());
+		dto.setActivityId(dto.getActivityId()==null ?fetchMaxWbsId():dto.getActivityId());
 		dto.setProjectKey(projectKey);
 		projectWbsList.add(dto);
 		if(node!=null && node.getChildren()!=null) {
 			for (TreeNode childNode : node.getChildren()) {
 				ProjectWbsDTO childdto=(ProjectWbsDTO) childNode.getData();
-				childdto.setActivityId(fetchMaxWbsId());
+				childdto.setActivityId(childdto.getActivityId()==null ?fetchMaxWbsId():childdto.getActivityId());
 				childdto.setParentKey(dto.getActivityId());
 				childdto.setProjectKey(projectKey);
 				projectWbsList.add(childdto);
@@ -123,5 +124,16 @@ public class ProjectWbsBean implements Serializable {
 	}
 
 	
+	public void fetchTreeWbsNode(List<ProjectWbsDTO> list,TreeNode parentnode) {
+		for (ProjectWbsDTO projectWbsDTO : list) {
+			TreeNode node= new DefaultTreeNode(projectWbsDTO, parentnode);
+			List<ProjectWbsDTO> childlist=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParent/"+projectWbsDTO.getActivityId(),ProjectWbsDTO.class);
+			if(childlist!=null && childlist.size()>0) {
+				fetchTreeWbsNode(childlist, node);
+			}
+		}
+		
+		
+	}
 	
 }

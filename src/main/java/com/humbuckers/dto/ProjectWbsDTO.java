@@ -19,7 +19,7 @@ public class ProjectWbsDTO {
 	private String weightage;
 	private String noOfDays;
 	private String remark;
-	private String activity;
+	private Long activityCode;
 	private String wbsname;
 	private Long projectKey;
 }

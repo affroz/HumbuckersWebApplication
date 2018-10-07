@@ -36,11 +36,11 @@
 							</p:column>
 
 							<p:column>
-								<p:commandLink rendered="#{document.activity ne 'A'}"
+								<p:commandLink rendered="#{document.activityCode ne 1}"
 									oncomplete="PF('wbsDialog').show()" value="Add WBS"
 									styleClass="mycomponenthide">
 								</p:commandLink>
-								<p:commandLink rendered="#{document.activity ne 'A'}"
+								<p:commandLink rendered="#{document.activityCode ne 1}"
 									oncomplete="PF('activityDialog').show()" value="Add Activity"
 									styleClass="mycomponenthide">
 								</p:commandLink>
@@ -50,7 +50,7 @@
 								</p:commandLink>
 								
 								
-								<h:panelGroup  rendered="#{document.activity eq 'A'}" >
+								<h:panelGroup  rendered="#{document.activityCode eq 1}" >
 	                             <div class="row" >
 									
 									<div class="col-md-6">

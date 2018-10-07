@@ -62,6 +62,9 @@ public class ProjectBean implements Serializable {
 	public String editProject() {
 		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
 		setActiveIndex("0");
+		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
+		List<ProjectWbsDTO> list=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParentByProject/"+projectId,ProjectWbsDTO.class);
+		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());
 		return "projectAddOrEditMain.xhtml?faces-redirect=true";
 	}
 	
@@ -89,6 +92,7 @@ public class ProjectBean implements Serializable {
 		if(this.project!=null) {
 				project =(ProjectDTO) AbstractRestTemplate.postObject("/project/saveProject",project,ProjectDTO.class);
 				if(project.getProjectId()!=null) {
+					AbstractRestTemplate.fetchObject("/project/deleteWbsByProject/"+project.getProjectId(),ProjectWbsDTO.class);
 					projectWbsBean.submit(project.getProjectId());
 				}
 				FacesContext.getCurrentInstance().addMessage(
