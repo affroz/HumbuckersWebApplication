@@ -92,7 +92,7 @@ public class ProjectBean implements Serializable {
 		if(this.project!=null) {
 				project =(ProjectDTO) AbstractRestTemplate.postObject("/project/saveProject",project,ProjectDTO.class);
 				if(project.getProjectId()!=null) {
-					AbstractRestTemplate.fetchObject("/project/deleteWbsByProject/"+project.getProjectId(),ProjectWbsDTO.class);
+					//AbstractRestTemplate.fetchObject("/project/deleteWbsByProject/"+project.getProjectId(),ProjectWbsDTO.class);
 					projectWbsBean.submit(project.getProjectId());
 				}
 				FacesContext.getCurrentInstance().addMessage(

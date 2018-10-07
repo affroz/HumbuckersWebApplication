@@ -6,81 +6,96 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui">
 
-    <style>
-   .mycomponenthide {
+	<style>
+.mycomponenthide {
 	display: none !Important;
 }
 
 .ui-state-highlight .mycomponenthide {
 	display: block !Important;
 }
-    </style>
+</style>
 	<div class="card">
 		<div class="header">
 			<h3 class="title">Project Activities</h3>
+		
+						
+						<p:commandLink update="treePnl" class="btn btn-info btn-fill pull-right"
+							oncomplete="PF('wbsDialog').show()" value="Add WBS">
+							<f:setPropertyActionListener value="#{projectBean.projectWbsBean.root}"
+								target="#{projectBean.projectWbsBean.selectedNode}" />
+						</p:commandLink>
 		</div>
 		<div class="content">
 			<h:panelGroup id="treePnl">
 				<div class="row">
-					<div class="col-md-8">
-						<p:commandLink update="treePnl" 
-							oncomplete="PF('wbsDialog').show()" value="Add">
-							<f:setPropertyActionListener value="#{projectBean.projectWbsBean.root}"
-								target="#{projectBean.projectWbsBean.selectedNode}" />
-						</p:commandLink>
-						<p:treeTable value="#{projectBean.projectWbsBean.root}" var="document"
-							selectionMode="single" selection="#{projectBean.projectWbsBean.selectedNode}">
+					<div class="col-md-12">
 
-							<p:column headerText="Name">
+						
+						<p:treeTable value="#{projectBean.projectWbsBean.root}"
+							var="document" selectionMode="single"
+							selection="#{projectBean.projectWbsBean.selectedNode}">
+
+							<p:column colspan="2">
 								<h:outputText value="#{document.activityName}" />
+								<p:commandLink update="treePnl" styleClass="mycomponenthide"
+											value="Remove" style="float:right;color: red;"
+											action="#{projectBean.projectWbsBean.deleteNode}">
+										</p:commandLink>
 							</p:column>
 
 							<p:column>
-								<p:commandLink rendered="#{document.activityCode ne 1}"
+
+
+
+								<p:commandLink rendered="#{document.activityCode ne 1}" style="float:right;color: green;"
 									oncomplete="PF('wbsDialog').show()" value="Add WBS"
 									styleClass="mycomponenthide">
 								</p:commandLink>
-								<p:commandLink rendered="#{document.activityCode ne 1}"
+								<p:commandLink rendered="#{document.activityCode ne 1}" style="float:right;margin-right: 15px;color: green;"
 									oncomplete="PF('activityDialog').show()" value="Add Activity"
 									styleClass="mycomponenthide">
 								</p:commandLink>
-								
-								<p:commandLink update="treePnl" styleClass="mycomponenthide"
-									 value="Remove" action="#{projectBean.projectWbsBean.deleteNode}">
-								</p:commandLink>
-								
-								
-								<h:panelGroup  rendered="#{document.activityCode eq 1}" >
-	                             <div class="row" >
-									
-									<div class="col-md-6">
-										<p:calendar value="#{document.activityPlannedStartDate}" placeholder="Planned Start Date"
-											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+
+								<h:panelGroup rendered="#{document.activityCode eq 1}">
+									<div class="row">
+
+										<div class="col-md-6">
+											<p:calendar value="#{document.activityPlannedStartDate}"
+												placeholder="Planned Start Date"
+												class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+										</div>
+										<div class="col-md-6">
+											<p:calendar value="#{document.activityPlannedEndDate}"
+												placeholder="Planned End Date"
+												class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+										</div>
 									</div>
-									<div class="col-md-6">
-										<p:calendar value="#{document.activityPlannedEndDate}" placeholder="Planned End Date"
-											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-									</div>
-									</div>
-									 <div class="row" >
-									<div class="col-md-6">
-										<p:calendar value="#{document.activityAcutalStartDate}" placeholder="Actual Start Date"
-											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-									</div>
-									<div class="col-md-6"> 
-										<p:calendar value="#{document.activityActualEndDate}" placeholder="Actual End Date"
-											class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-									</div>
-									
-								</div>
-                             
-                             </h:panelGroup>
+									<h:panelGroup rendered="#{document.activityId ne null}">
+										<div class="row">
+											<div class="col-md-6">
+												<p:calendar value="#{document.activityAcutalStartDate}"
+													placeholder="Actual Start Date"
+													class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+											</div>
+
+
+											<div class="col-md-6">
+												<p:calendar value="#{document.activityActualEndDate}"
+													placeholder="Actual End Date"
+													class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+											</div>
+
+										</div>
+									</h:panelGroup>
+
+								</h:panelGroup>
 							</p:column>
 						</p:treeTable>
 					</div>
 				</div>
 			</h:panelGroup>
-			
+
 
 			<p:dialog id="dialog" header="Add Activity"
 				widgetVar="activityDialog" resizable="false">
@@ -96,18 +111,17 @@
 					</p:commandLink>
 				</p:outputPanel>
 			</p:dialog>
-			
-						<p:dialog id="dialog1" header="Add WBS"
-				widgetVar="wbsDialog" resizable="false">
+
+			<p:dialog id="dialog1" header="Add WBS" widgetVar="wbsDialog"
+				resizable="false">
 				<p:outputPanel id="documentPanel">
 					<h:outputLabel value="Name: " />
 					<p:inputText
 						value="#{projectBean.projectWbsBean.projectWbsDTO.wbsname}"
 						style="font-weight:bold" />
 
-					<p:commandLink update="treePnl" 
-						oncomplete="PF('wbsDialog').hide()" value="Add"
-						action="#{projectBean.projectWbsBean.addWbsNode}">
+					<p:commandLink update="treePnl" oncomplete="PF('wbsDialog').hide()"
+						value="Add" action="#{projectBean.projectWbsBean.addWbsNode}">
 					</p:commandLink>
 				</p:outputPanel>
 			</p:dialog>

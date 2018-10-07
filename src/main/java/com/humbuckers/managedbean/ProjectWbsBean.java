@@ -45,13 +45,15 @@ public class ProjectWbsBean implements Serializable {
 			selectedNode=root;
 		}
 		projectWbsDTO.setActivityName(projectWbsDTO.getWbsname());
-		new DefaultTreeNode(projectWbsDTO,selectedNode);
+		TreeNode node=new DefaultTreeNode(projectWbsDTO,selectedNode);
+		node.setExpanded(true);
 		setProjectWbsDTO(new ProjectWbsDTO());
 	}
 	
 	public void addActivityNode() {
 		projectWbsDTO.setActivityCode(1L);
-		new DefaultTreeNode(projectWbsDTO,selectedNode);
+		TreeNode node=new DefaultTreeNode(projectWbsDTO,selectedNode);
+		node.setExpanded(true);
 		setProjectWbsDTO(new ProjectWbsDTO());
 	}
 	
