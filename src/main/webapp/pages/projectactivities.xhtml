@@ -37,7 +37,7 @@
 							selection="#{projectBean.projectWbsBean.selectedNode}">
 
 							<p:column colspan="2">
-								<h:outputText value="#{document.activityName}" />
+								<h:outputText value="#{document.activityName}" style="#{document.activityCode ne 1 ?'font-weight: bold;' : ''}"/>
 								<p:commandLink update="treePnl" styleClass="mycomponenthide"
 											value="Remove" style="float:right;color: red;"
 											action="#{projectBean.projectWbsBean.deleteNode}">
