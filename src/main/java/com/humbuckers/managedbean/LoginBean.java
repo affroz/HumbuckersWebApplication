@@ -50,6 +50,11 @@ public class LoginBean implements Serializable {
 	public String logout() throws IOException {
 		SessionUtils.removeObjectFromHTTPSesion("LOGIN_USER");
 		SessionUtils.sessionInvalidate();
+		FacesContext.getCurrentInstance().addMessage(
+				null,
+				new FacesMessage(FacesMessage.SEVERITY_WARN,
+						"Logged out successully",
+						"Logged out successully"));
 		return "/login?faces-redirect=true"; 
 	}
 

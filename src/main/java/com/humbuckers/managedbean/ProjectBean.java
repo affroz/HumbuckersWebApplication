@@ -46,9 +46,8 @@ public class ProjectBean implements Serializable {
 		setActiveIndex("0");
 	}
 
-	public String onClickOfMenu() {
+	public void onPageLoad() {
 		fetchAllProjects();
-		return "projectListMain.xhtml?faces-redirect=true";
 	}
 
 	public String addNewProject() {
@@ -102,7 +101,6 @@ public class ProjectBean implements Serializable {
 								"Project saved successfully"));
 				
 				project=new ProjectDTO();
-				onClickOfMenu();
 				return "projectListMain.xhtml?faces-redirect=true";
 			
 		}

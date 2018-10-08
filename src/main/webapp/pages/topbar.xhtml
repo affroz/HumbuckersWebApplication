@@ -3,13 +3,13 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
+        <h:form>
 
 	<div class="topbar">
 		<div class="logo"></div>
 		<img src="../resources/images/logo1.png" class="app-name" /> <a
 			id="topbar-menu-button" href="#"> <i class="fa fa-bars"></i>
 		</a>
-
 		<ul class="topbar-menu fadeInDown animated">
 			<li class="profile-item"><a id="topbar-usermenu-button" href="#">
 					<div class="profile-image"></div>
@@ -17,9 +17,11 @@
 						<span class="topbar-item-name profile-name">#{sessionScope['LOGIN_USER'].fullName}</span>
 						<span class="topbar-item-name profile-role">#{sessionScope['LOGIN_USER'].userRole.name}</span>
 					</div>
+					 <p:commandLink value="Logout" action="#{loginBean.logout}" id="submit" /> 
 			</a> </li>
 		</ul>
 	</div>
+		</h:form>
 
 
 
