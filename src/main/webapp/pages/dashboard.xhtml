@@ -8,38 +8,47 @@
 	<ui:define name="content">
 		<h:form prependId="false">
 
-			<div class="row">
-				<div class="col-md-6">
-					<div class="card test">
-
-						<div class="header">
-							<h4 class="title">Email Statistics</h4>
-							<p class="category">Last Campaign Performance</p>
-						</div>
-						<div class="content">
-							<humbuckers:humbuckersChart type="pie" animationEnabled="true"
-								chartTitle="test" yaxisTitle="t" yaxisSuffix=""
-								yaxisIncludeZero="" xaxisTitle="" id="test1"
-								value="#{dashboardBean.piechart}" />
-						</div>
+			<div class="ui-g dashboard">
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-1">
+						<span class="overview-box-name">Unread Messages</span> <span
+							class="overview-box-count">150</span> <span
+							class="overview-box-badge">+30%</span><img id="j_idt79"
+							src="../javax.faces.resource/images/dashboard/chart-1.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-2">
+						<span class="overview-box-name">Check-Ins</span> <span
+							class="overview-box-count">532</span> <span
+							class="overview-box-badge">+45%</span><img id="j_idt81"
+							src="../javax.faces.resource/images/dashboard/chart-2.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-3">
+						<span class="overview-box-name">Files Synced</span> <span
+							class="overview-box-count">640</span> <span
+							class="overview-box-badge">-75%</span><img id="j_idt83"
+							src="../javax.faces.resource/images/dashboard/chart-3.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-4">
+						<span class="overview-box-name">Users Online</span> <span
+							class="overview-box-count">5251</span> <span
+							class="overview-box-badge">25%</span><img id="j_idt85"
+							src="../javax.faces.resource/images/dashboard/chart-4.svg?ln=barcelona-layout"
+							alt="" />
 					</div>
 				</div>
 
-				<div class="col-md-6">
-					<div class="card test">
-						<div class="header">
-							<h4 class="title">Users Behavior</h4>
-							<p class="category">24 Hours performance</p>
-						</div>
-						<div class="content">
-							<humbuckers:humbuckersChart type="column" animationEnabled="true"
-								chartTitle="test" yaxisTitle="t" yaxisSuffix=""
-								yaxisIncludeZero="" xaxisTitle="" id="test"
-								value="#{dashboardBean.columnchart}" />
-						</div>
-					</div>
 				</div>
-			</div>
+
+
 
 
 

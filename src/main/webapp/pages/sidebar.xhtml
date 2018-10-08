@@ -1,38 +1,40 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-
-	<div class="sidebar" data-color="purple"
-		data-image="../resources/assets/img/sidebar-5.jpg">
-
-		<div class="sidebar-wrapper">
-			<div class="logo">
-				<h3>#{sessionScope['LOGIN_USER'].fullName} |</h3>
-				<h5>#{sessionScope['LOGIN_USER'].userRole.name}</h5>
-			</div>
-
-			<ul class="nav">
-				<li><p:commandLink action="dashboard.xhtml"> <i class="pe-7s-graph"></i>
-						<p>Dashboard</p>
-				</p:commandLink></li>
-				<li><p:commandLink action="#{projectBean.onClickOfMenu}" 	 ajax="false"> <i class="pe-7s-user"></i><p>Project List</p>
-				</p:commandLink></li>
-				<li><p:commandLink action="#{userBean.onClickOfMenu}" 	 ajax="false"> <i class="pe-7s-note2"></i>
-						<p>User List</p>
-				</p:commandLink></li>
+	<div class="layout-sidebar ">
+		<div id="j_idt47" class="layout-tabmenu">
+		<form>
+			<ul class="layout-tabmenu-nav">
+				<li><a  class="ripplelink tabmenuitem-link" href="dashboard.xhtml"><i
+						class="material-icons">home</i></a>
+				<div class="layout-tabmenu-tooltip">
+						<div class="layout-tabmenu-tooltip-arrow"></div>
+						<div class="layout-tabmenu-tooltip-text">Dashboard</div>
+					</div></li>
+					
+				<li><a   class="ripplelink tabmenuitem-link" href="projectListMain.xhtml"><i
+						class="material-icons">insert_chart</i></a>
+				<div class="layout-tabmenu-tooltip">
+						<div class="layout-tabmenu-tooltip-arrow"></div>
+						<div class="layout-tabmenu-tooltip-text">Projects</div>
+					</div></li>
+				<li><a href="userslist.xhtml"  class="ripplelink tabmenuitem-link"	><i
+						class="material-icons" > people</i></a>
+				<div class="layout-tabmenu-tooltip">
+						<div class="layout-tabmenu-tooltip-arrow"></div>
+						<div class="layout-tabmenu-tooltip-text">Users</div>
+					</div></li>
+			</ul> 
 				
-				<li class="active-pro">
-                   <p:commandLink value="Logout" action="#{loginBean.logout}" id="submit"/> 
-                </li>
-				
-			
-
-			</ul>
+		</form>
 		</div>
 	</div>
+
+
+
+
 
 
 </ui:composition>
