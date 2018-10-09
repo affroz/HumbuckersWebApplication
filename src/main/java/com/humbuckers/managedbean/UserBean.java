@@ -1,6 +1,5 @@
 package com.humbuckers.managedbean;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +11,6 @@ import javax.inject.Named;
 import org.primefaces.event.RowEditEvent;
 import org.springframework.context.annotation.Scope;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.humbuckers.dto.UsersDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -36,9 +33,8 @@ public class UserBean implements Serializable {
 		
 	}
 	
-	public String onClickOfMenu() {
+	public void onPageLoad() {
 		userlist=fetchAllUsers();
-		return "userslist.xhtml?faces-redirect=true";
 	}
 	
 	public List<UsersDTO> fetchAllUsers(){
@@ -47,7 +43,7 @@ public class UserBean implements Serializable {
 	}
 	
 	
-	public String onRowEdit(RowEditEvent event) {
+	public void onRowEdit(RowEditEvent event) {
 		UsersDTO selectedUser=(UsersDTO) event.getObject();
 		if(selectedUser!=null && selectedUser.getUserId()!=null) {
 			selectedUser=updateUser(selectedUser);
@@ -55,7 +51,6 @@ public class UserBean implements Serializable {
 					"User Details updated Successfully",
 					"User Details updated Successfully");
 		}
-		return "";
 		
     }
      
