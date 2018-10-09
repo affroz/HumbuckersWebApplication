@@ -1,0 +1,32 @@
+.mytreehor .ui-icon-plus:before {
+	color: white !Important;
+}
+
+.mytreehor .ui-icon-minus:before {
+	color: white !Important;
+}
+
+.engineering .ui-treenode-content {
+	background-color: #1976d2 !Important;
+	color: white !Important;
+}
+
+.procurement .ui-treenode-content {
+	background-color: #009688 !Important;
+	color: white !Important;
+}
+
+.construction .ui-treenode-content {
+	background-color: #e91e63 !Important;
+	color: white !Important;
+}
+
+.testing .ui-treenode-content {
+	background-color: #673ab7 !Important;
+	color: white !Important;
+}
+
+.main .ui-treenode-content {
+	background-color: #f7a02d !Important;
+	color: white !Important;
+}

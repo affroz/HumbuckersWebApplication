@@ -64,7 +64,7 @@ public class ProjectBean implements Serializable {
 	public String viewProject() {
 		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
 		projectViewBean.fetchProjectWbs(project.getProjectId());
-		projectViewBean.createTreeStucture(project.getProjectId());
+		projectViewBean.createTreeStucture(project.getProjectId(),project.getProjectName());
 		return "projectViewMain.xhtml?faces-redirect=true";
 	}
 	

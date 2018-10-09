@@ -6,15 +6,8 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
 	<ui:define name="content">
-		<style>
-body .ui-tree.ui-tree-horizontal .ui-treenode-content {
-     border: none !Important;
-}
-</style>
+	
 		<h:form prependId="false">
-
-
-
 
 			<div class="dashboard">
 				<div class="ui-g-12 activity-feed">
@@ -42,24 +35,37 @@ body .ui-tree.ui-tree-horizontal .ui-treenode-content {
 			</div>
 
 
- <div class="ui-g-12">
-                    <div class="card card-w-title">
-                         <p:tree value="#{projectBean.projectViewBean.root}" var="node" orientation="horizontal">
-        <p:treeNode>
-            <p:outputLabel value="#{node}" />
-        </p:treeNode>
-    </p:tree>
-                    </div></div>
+			<div class="ui-g-12">
+				<div class="card card-w-title">
+				<h1>WBS and Activities</h1>
+
+					<p:panel style="height:300px;overflow-y: scroll;border:none;">
+					<p:tree value="#{projectBean.projectViewBean.root}" var="node"
+						orientation="horizontal" styleClass="mytreehor">
+						<p:treeNode styleClass="main">
+							<p:outputLabel value="#{node}" />
+						</p:treeNode>
+						<p:treeNode type="engineering" styleClass="engineering">
+							<h:outputText value="#{node.activityName}" />
+						</p:treeNode>
+						<p:treeNode type="procurement" styleClass="procurement">
+							<h:outputText value="#{node.activityName}" />
+						</p:treeNode>
+						<p:treeNode type="construction" styleClass="construction">
+							<h:outputText value="#{node.activityName}" />
+						</p:treeNode>
+						<p:treeNode type="testing" styleClass="testing">
+							<h:outputText value="#{node.activityName}" />
+						</p:treeNode>
+					</p:tree>
+					</p:panel>
+				</div>
+			</div>
 
 			<div class="ui-g-12">
 				<div class="card card-w-title">
-					<h1>WBS/Activities Details</h1>
-					
-					
-					
-					
-					
-					
+					<h1>Activities timeline</h1>
+
 					<p:panel style="height:300px;overflow-y: scroll;">
 
 						<p:treeTable value="#{projectBean.projectViewBean.root}"
@@ -141,15 +147,6 @@ body .ui-tree.ui-tree-horizontal .ui-treenode-content {
 					</p:panel>
 				</div>
 			</div>
-
-
-
-
-
-
-
-
-
 
 
 		</h:form>

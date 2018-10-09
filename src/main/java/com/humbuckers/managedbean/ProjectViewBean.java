@@ -32,7 +32,6 @@ public class ProjectViewBean implements Serializable {
 	private String constweight;
 	private String testweight;
 	private TreeNode root;
-	private String style;
 	
 	@Inject
 	private ProjectReportBean projectReportBean;
@@ -86,13 +85,27 @@ public class ProjectViewBean implements Serializable {
     	}
     }
     
-    public void createTreeStucture(Long projectKey) {
-    	root = new DefaultTreeNode("WBS", null);
+    public void createTreeStucture(Long projectKey, String projectName) {
+    	root = new DefaultTreeNode(projectName, null);
 	    root.setExpanded(true);
 	 	if(projectWbsMainList!=null && projectWbsMainList.size()>0) {
 			for (ProjectWbsDTO entity : projectWbsMainList) {
-				TreeNode node=new DefaultTreeNode(entity,root);
-				addToTreeNode(node, entity.getActivityId());
+				
+				String style = null;
+				if(entity.getActivityName()!=null && "Engineering".equalsIgnoreCase(entity.getActivityName())) {
+					style="engineering";
+				}
+				if(entity.getActivityName()!=null && "Procurement".equalsIgnoreCase(entity.getActivityName())) {
+					style="procurement";
+				}
+				if(entity.getActivityName()!=null && "Construction".equalsIgnoreCase(entity.getActivityName())) {
+					style="construction";
+				}
+				if(entity.getActivityName()!=null && "Testing & Commisioning".equalsIgnoreCase(entity.getActivityName())) {
+					style="testing";
+				}
+				TreeNode node=new DefaultTreeNode(style,entity,root);
+				addToTreeNode(node, entity.getActivityId(),style);
 				
 			}
 		}
@@ -100,12 +113,12 @@ public class ProjectViewBean implements Serializable {
 	
 	
     
-    public void addToTreeNode(TreeNode node, Long activityId) {
+    public void addToTreeNode(TreeNode node, Long activityId, String style) {
     	List<ProjectWbsDTO> subList=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParent/"+activityId,ProjectWbsDTO.class);
 		if(subList !=null && subList.size()>0) {
 			for (ProjectWbsDTO entity : subList) {
-				TreeNode childNode=new DefaultTreeNode(entity,node);
-				addToTreeNode(childNode, entity.getActivityId());
+				TreeNode childNode=new DefaultTreeNode(style,entity,node);
+				addToTreeNode(childNode, entity.getActivityId(),style);
 			}
 		}
 	}
