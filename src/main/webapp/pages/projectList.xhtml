@@ -53,13 +53,7 @@
 										</p:commandLink>
 									</div>
 									<div class="row">
-										<p:commandLink class="pull-right"
-											action="#{projectBean.viewProject}">
-											<f:setPropertyActionListener value="#{project.projectId}"
-												target="#{projectBean.projectId}" />
-
-											<i class="pe-7s-look"></i>
-										</p:commandLink>
+									
 									</div>
 
 
@@ -83,6 +77,15 @@
 										<small>Interior Designer:</small>
 										#{project.projectInteriorDesigner}
 									</p>
+									
+									
+										<p:commandLink class="pull-right" value="view"
+											action="#{projectBean.viewProject}">
+											<f:setPropertyActionListener value="#{project.projectId}"
+												target="#{projectBean.projectId}" />
+
+											<i class="pe-7s-look"></i>
+										</p:commandLink>
 								</div>
 							</div>
 						</div>

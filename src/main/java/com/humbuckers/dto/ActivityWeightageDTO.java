@@ -11,21 +11,7 @@ public class ActivityWeightageDTO {
 	
 	private String weightagePercentage;
 	
-	private Long activityId;
-	
-	private ActivitiesDTO activitiesDTO;
-	
-	private String plannedPhysical;
-	
-	private String actualPhysical;
-	
-	private String plannedEarned;
-	
-	private String actualEarned;
-	
-	private String variance;
-	
-	private String remark;
+	private Long projectWbsKey;
 	
 }
 

@@ -11,7 +11,7 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.context.annotation.Scope;
 
-import com.humbuckers.dto.ProjectDTO;
+import com.humbuckers.dto.ActivitiesDTO;
 import com.humbuckers.dto.ProjectWbsDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -32,19 +32,49 @@ public class ProjectWbsBean implements Serializable {
     private List<ProjectWbsDTO>projectWbsList;
     private ProjectWbsDTO projectWbsDTO;
     private TreeNode selectedNode;
+    private String nodefor;
+    private List<ActivitiesDTO> activities;
 	
 	@PostConstruct
 	public void init() {
-		root=new DefaultTreeNode("WBS", null);
+		fetchNodes();
 		projectWbsDTO=new ProjectWbsDTO();
+		activities=AbstractRestTemplate.fetchObjectList("/activity/fetchAllActivity",ActivitiesDTO.class);
+		setNodefor("wbs");
 	}
-
+	
+	
+    public void fetchNodes() {
+    	 root=new DefaultTreeNode("WBS", null);
+    	 List<ActivitiesDTO> list= AbstractRestTemplate.fetchObjectList("/activity/fetchMainActivity",ActivitiesDTO.class);
+    	 if(list!=null && list.size()>0) {
+    		 for (ActivitiesDTO activitiesDTO : list) {
+    			 ProjectWbsDTO dto=new ProjectWbsDTO();
+    			 dto.setActivityName(activitiesDTO.getActivityName());
+    			 dto.setActivityCode(0L);
+    			 new DefaultTreeNode(dto,root);
+			}
+    	 }
+	}
+    
+	public void addNode() {
+		if(nodefor!=null && !"".equals(nodefor)) {
+			if("wbs".equals(nodefor)) {
+				addWbsNode();
+			}
+			else if("act".equals(nodefor)) {
+				addActivityNode();
+			}
+		}else {
+			addWbsNode();
+		}
+		setNodefor("wbs");
+	}
 	
 	public void addWbsNode() {
 		if(selectedNode==null) {
 			selectedNode=root;
 		}
-		projectWbsDTO.setActivityName(projectWbsDTO.getWbsname());
 		TreeNode node=new DefaultTreeNode(projectWbsDTO,selectedNode);
 		node.setExpanded(true);
 		setProjectWbsDTO(new ProjectWbsDTO());
@@ -138,4 +168,16 @@ public class ProjectWbsBean implements Serializable {
 		
 	}
 	
+	
+	 public List<String> completeText(String enteredValue) {
+	        List<String> results = new ArrayList<String>();
+	        if(activities!=null && activities.size()>0) {
+	    		 for (ActivitiesDTO activitiesDTO : activities) {
+	    			 if (activitiesDTO.getActivityName().toLowerCase().startsWith(enteredValue.toLowerCase())) {
+	    				 results.add(activitiesDTO.getActivityName());
+	 	            } 
+				}
+	    	 }
+	        return results;
+	    }
 }

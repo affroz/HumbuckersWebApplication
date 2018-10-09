@@ -6,136 +6,192 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui">
 
+
 	<style>
-.mycomponenthide {
+body .ui-treetable thead th:last-child {
+	border-right: none !Important;
+}
+
+body .ui-treetable thead th:first-child {
+	border-left: none !Important;
+}
+
+.myclass {
 	display: none !Important;
 }
 
-.ui-state-highlight .mycomponenthide {
+.ui-state-highlight .myclass {
 	display: block !Important;
 }
 </style>
-	<div class="card">
-		<div class="header">
-			<h3 class="title">Project Activities</h3>
-		
-						
-						<p:commandLink update="treePnl" class="btn btn-info btn-fill pull-right"
-							oncomplete="PF('wbsDialog').show()" value="Add WBS">
-							<f:setPropertyActionListener value="#{projectBean.projectWbsBean.root}"
-								target="#{projectBean.projectWbsBean.selectedNode}" />
-						</p:commandLink>
-		</div>
-		<div class="content">
-			<h:panelGroup id="treePnl">
-				<div class="row">
-					<div class="col-md-12">
+	<div class="ui-fluid">
+		<div class="ui-g">
+			<div class="ui-g-12">
+				<div class="card card-w-title">
 
-						
-						<p:treeTable value="#{projectBean.projectWbsBean.root}"
-							var="document" selectionMode="single"
-							selection="#{projectBean.projectWbsBean.selectedNode}">
-
-							<p:column colspan="2">
-								<h:outputText value="#{document.activityName}" style="#{document.activityCode ne 1 ?'font-weight: bold;' : ''}"/>
-								<p:commandLink update="treePnl" styleClass="mycomponenthide"
-											value="Remove" style="float:right;color: red;"
-											action="#{projectBean.projectWbsBean.deleteNode}">
-										</p:commandLink>
-							</p:column>
-
-							<p:column>
+					<h1>Add WBS and Activities</h1>
+					<p:commandLink oncomplete="PF('nodeDialog').show()" value="Add WBS"
+						rendered="false">
+						<f:setPropertyActionListener
+							value="#{projectBean.projectWbsBean.root}"
+							target="#{projectBean.projectWbsBean.selectedNode}" />
+					</p:commandLink>
 
 
+					<p:treeTable value="#{projectBean.projectWbsBean.root}"
+						var="document" selectionMode="single" id="treePnl"
+						selection="#{projectBean.projectWbsBean.selectedNode}">
 
-								<p:commandLink rendered="#{document.activityCode ne 1}" style="float:right;color: green;"
-									oncomplete="PF('wbsDialog').show()" value="Add WBS"
-									styleClass="mycomponenthide">
-								</p:commandLink>
-								<p:commandLink rendered="#{document.activityCode ne 1}" style="float:right;margin-right: 15px;color: green;"
-									oncomplete="PF('activityDialog').show()" value="Add Activity"
-									styleClass="mycomponenthide">
-								</p:commandLink>
+						<p:column colspan="2">
+							<p:outputLabel value="#{document.activityName}"
+								style="#{document.activityCode eq 0 ? 'font-size: 19px;color: #1976d2;':''}" />
+						</p:column>
 
-								<h:panelGroup rendered="#{document.activityCode eq 1}">
-									<div class="row">
+						<p:column colspan="2">
+							<h:panelGroup rendered="#{document.activityCode eq 1}">
+								<div class="ui-grid-row">
 
-										<div class="col-md-6">
-											<p:calendar value="#{document.activityPlannedStartDate}"
-												placeholder="Planned Start Date"
-												class="form-control mycalendar" pattern="dd-MMM-yyyy" />
+									<div class="ui-panelgrid-cell ui-grid-col-10">
+
+										<div class="ui-grid-row">
+
+											<div class="ui-panelgrid-cell ui-grid-col-6">
+
+												<p:calendar value="#{document.activityPlannedStartDate}"
+													placeholder="Planned Start Date" pattern="dd-MMM-yyyy" />
+
+											</div>
+
+
+											<div class="ui-panelgrid-cell ui-grid-col-6">
+
+												<p:calendar value="#{document.activityPlannedEndDate}"
+													placeholder="Planned End Date" pattern="dd-MMM-yyyy" />
+
+											</div>
+
+
 										</div>
-										<div class="col-md-6">
-											<p:calendar value="#{document.activityPlannedEndDate}"
-												placeholder="Planned End Date"
-												class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-										</div>
+										<h:panelGroup rendered="#{document.activityId ne null}">
+											<div class="ui-grid-row">
+												<div class="ui-panelgrid-cell ui-grid-col-6">
+													<p:calendar value="#{document.activityAcutalStartDate}"
+														placeholder="Actual Start Date" pattern="dd-MMM-yyyy" />
+												</div>
+
+
+												<div class="ui-panelgrid-cell ui-grid-col-6">
+													<p:calendar value="#{document.activityActualEndDate}"
+														placeholder="Actual End Date" pattern="dd-MMM-yyyy" />
+												</div>
+
+											</div>
+										</h:panelGroup>
+
+
+
 									</div>
-									<h:panelGroup rendered="#{document.activityId ne null}">
-										<div class="row">
-											<div class="col-md-6">
-												<p:calendar value="#{document.activityAcutalStartDate}"
-													placeholder="Actual Start Date"
-													class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-											</div>
+									<div class="ui-panelgrid-cell ui-grid-col-2">
+										<p:commandLink update="treePnl"
+											style="float: right;background-color: #ff563f !Important;"
+											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only myclass"
+											action="#{projectBean.projectWbsBean.deleteNode}">
+											<i class="ui-button-icon-left ui-icon ui-c ui-icon-minus"></i>
+										</p:commandLink>
+
+									</div>
+								</div>
+							</h:panelGroup>
+
+							<p:commandLink update="treePnl"
+								rendered="#{document.activityCode ne 1}"
+								style="float: right;background-color: #ff563f !Important;"
+								class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only myclass"
+								action="#{projectBean.projectWbsBean.deleteNode}">
+								<i class="ui-button-icon-left ui-icon ui-c ui-icon-minus"></i>
+							</p:commandLink>
+
+							<p:commandLink rendered="#{document.activityCode ne 1}"
+								style="float: right;background-color: #19d29f !Important;    margin-right: 16px;"
+								class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only myclass"
+								oncomplete="PF('nodeDialog').show()">
+								<i class="ui-button-icon-left ui-icon ui-c ui-icon-add"></i>
+							</p:commandLink>
+
+						</p:column>
+					</p:treeTable>
 
 
-											<div class="col-md-6">
-												<p:calendar value="#{document.activityActualEndDate}"
-													placeholder="Actual End Date"
-													class="form-control mycalendar" pattern="dd-MMM-yyyy" />
-											</div>
 
-										</div>
-									</h:panelGroup>
+					<div class="ui-g footer-content">
+						<div class="ui-g-12 ui-md-1">
+							<p:commandButton value="Back"
+								action="#{projectBean.onClickofBack}" ajax="false"
+								update="@form" />
 
-								</h:panelGroup>
-							</p:column>
-						</p:treeTable>
+						</div>
+						<div class="ui-g-12 ui-md-10"></div>
+						<div class="ui-g-12 ui-md-1">
+							<p:commandButton value="Save Project"
+								action="#{projectBean.saveProject}" ajax="false" update="@form" />
+						</div>
 					</div>
+
+
 				</div>
-			</h:panelGroup>
-
-
-			<p:dialog id="dialog" header="Add Activity"
-				widgetVar="activityDialog" resizable="false">
-				<p:outputPanel>
-					<h:outputLabel value="Name: " />
-					<p:inputText
-						value="#{projectBean.projectWbsBean.projectWbsDTO.activityName}"
-						style="font-weight:bold" />
-
-					<p:commandLink update="treePnl"
-						oncomplete="PF('activityDialog').hide()" value="Add"
-						action="#{projectBean.projectWbsBean.addActivityNode}">
-					</p:commandLink>
-				</p:outputPanel>
-			</p:dialog>
-
-			<p:dialog id="dialog1" header="Add WBS" widgetVar="wbsDialog"
-				resizable="false">
-				<p:outputPanel id="documentPanel">
-					<h:outputLabel value="Name: " />
-					<p:inputText
-						value="#{projectBean.projectWbsBean.projectWbsDTO.wbsname}"
-						style="font-weight:bold" />
-
-					<p:commandLink update="treePnl" oncomplete="PF('wbsDialog').hide()"
-						value="Add" action="#{projectBean.projectWbsBean.addWbsNode}">
-					</p:commandLink>
-				</p:outputPanel>
-			</p:dialog>
-
-
-
-
-
+			</div>
 		</div>
-		<p:commandButton value="Save Project"
-			action="#{projectBean.saveProject}" ajax="false"
-			class="btn btn-info btn-fill pull-right" update="@form" />
-		<p:commandButton value="Back" action="#{projectBean.onClickofBack}"
-			ajax="false" class="btn btn-info btn-fill" update="@form" />
-		<div class="clearfix"></div>
 	</div>
+
+	<p:dialog id="nodeDialog" widgetVar="nodeDialog" resizable="false"
+		header="Enter WBS/Activity Details" modal="true">
+
+		<div class="ui-panelgrid ui-widget ui-panelgrid-blank form-group">
+			<div
+				class="ui-panelgrid-content ui-widget-content ui-grid ui-grid-responsive">
+				<div class="ui-grid-row">
+					<div class="ui-panelgrid-cell ui-grid-col-2">
+						<p:outputLabel value="Please select" />
+					</div>
+					<div class="ui-panelgrid-cell ui-grid-col-10">
+
+						<p:selectOneRadio value="#{projectBean.projectWbsBean.nodefor}">
+							<f:selectItem itemLabel="Add WBS" itemValue="wbs" />
+							<f:selectItem itemLabel="Add Activity" itemValue="act" />
+						</p:selectOneRadio>
+
+					</div>
+
+				</div>
+
+				<div class="ui-grid-row">
+					<div class="ui-panelgrid-cell ui-grid-col-4">
+						<h:outputLabel value="Name: " />
+					</div>
+					<div class="ui-panelgrid-cell ui-grid-col-8">
+                        <p:autoComplete  value="#{projectBean.projectWbsBean.projectWbsDTO.activityName}" completeMethod="#{projectWbsBean.completeText}" />
+						<!-- <p:inputText
+							value="#{projectBean.projectWbsBean.projectWbsDTO.activityName}" /> -->
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="ui-g footer-content">
+
+			<div class="ui-g-12 ui-md-5"></div>
+			<div class="ui-g-12 ui-md-3">
+				<p:commandButton update="treePnl,nodeDialog"
+					oncomplete="PF('nodeDialog').hide()" value="Add"
+					action="#{projectBean.projectWbsBean.addNode}">
+				</p:commandButton>
+			</div>
+			<div class="ui-g-12 ui-md-4"></div>
+		</div>
+
+
+	</p:dialog>
+
+
+
 </ui:composition>

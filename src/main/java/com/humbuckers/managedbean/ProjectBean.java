@@ -10,7 +10,6 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.primefaces.model.DefaultTreeNode;
 import org.springframework.context.annotation.Scope;
 
 import com.humbuckers.dto.ProjectDTO;
@@ -30,6 +29,9 @@ public class ProjectBean implements Serializable {
 	
 	@Inject
 	private ProjectWbsBean projectWbsBean;
+	
+	@Inject
+	private ProjectViewBean projectViewBean;
 	
 	private ProjectDTO project;
 	
@@ -53,25 +55,30 @@ public class ProjectBean implements Serializable {
 	public String addNewProject() {
 		project=new ProjectDTO();
 		setActiveIndex("0");
-		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
+		projectWbsBean.fetchNodes();
 		projectWbsBean.setProjectWbsDTO(new ProjectWbsDTO());
 		return "projectAddOrEditMain.xhtml?faces-redirect=true";
 	}
 	
-	public String editProject() {
-		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
-		setActiveIndex("0");
-		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
-		List<ProjectWbsDTO> list=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParentByProject/"+projectId,ProjectWbsDTO.class);
-		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());
-		return "projectAddOrEditMain.xhtml?faces-redirect=true";
-	}
 	
 	public String viewProject() {
 		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
-		setActiveIndex("0");
+		projectViewBean.fetchProjectWbs(project.getProjectId());
+		projectViewBean.createTreeStucture(project.getProjectId());
 		return "projectViewMain.xhtml?faces-redirect=true";
 	}
+	
+	
+	public String editProject() {
+		/*project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
+		setActiveIndex("0");
+		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
+		List<ProjectWbsDTO> list=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParentByProject/"+projectId,ProjectWbsDTO.class);
+		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());*/
+		return "projectAddOrEditMain.xhtml?faces-redirect=true";
+	}
+	
+	
 
 	public void onClickofNext() {
 		setActiveIndex("1");

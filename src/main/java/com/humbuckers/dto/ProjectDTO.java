@@ -2,7 +2,6 @@ package com.humbuckers.dto;
 
 
 import java.util.Date;
-import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +21,6 @@ public class ProjectDTO {
 	private Date projectPlannedStartDate;
 	private Date projectPlannedEndDate;
 	private Date projectAcutalStartDate;
-	private List<ProjectActivitiesDTO> projectActivityList;
 }
 
 

@@ -10,45 +10,52 @@
 			<f:event type="preRenderView" listener="#{userBean.onPageLoad}" />
 		</f:metadata>
 		<h:form prependId="false">
-            <p:growl id="message"></p:growl>
-
-			<h4>All Users and Details</h4>
-			<p:dataTable var="user" value="#{userBean.userlist}" editable="true">
-
-				<p:ajax event="rowEdit" listener="#{userBean.onRowEdit}" process="@this" update="message"/>
-				<p:ajax event="rowEditCancel" listener="#{userBean.onRowCancel}"/>
 
 
+			<p:growl id="message"></p:growl>
+
+			<div class="card card-w-title">
+				<h4>All Users and Details</h4>
 
 
-				<p:column headerText="User Id">
-					<h:outputText value="#{user.userId}" />
-				</p:column>
+				<p:dataTable var="user" value="#{userBean.userlist}" editable="true" >
 
-				<p:column headerText="User Name">
-					<p:cellEditor>
-						<f:facet name="output">
-							<h:outputText value="#{user.userName}" />
-						</f:facet>
-						<f:facet name="input">
-							<p:inputText id="modelInput" value="#{user.userName}" />
-						</f:facet>
-					</p:cellEditor>
-				</p:column>
+					<p:ajax event="rowEdit" listener="#{userBean.onRowEdit}"
+						process="@this" update="message" />
+					<p:ajax event="rowEditCancel" listener="#{userBean.onRowCancel}" />
 
-				<p:column headerText="Full Name">
-					<h:outputText value="#{user.fullName}" />
-				</p:column>
 
-				<p:column headerText="Role">
-					<h:outputText value="#{user.userRole.name}" />
-				</p:column>
 
-				<p:column headerText="Action">
-					<p:rowEditor />
-				</p:column>
 
-			</p:dataTable>
+					<p:column headerText="User Id">
+						<h:outputText value="#{user.userId}" />
+					</p:column>
+
+					<p:column headerText="User Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{user.userName}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{user.userName}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Full Name">
+						<h:outputText value="#{user.fullName}" />
+					</p:column>
+
+					<p:column headerText="Role">
+						<h:outputText value="#{user.userRole.name}" />
+					</p:column>
+
+					<p:column headerText="Action">
+						<p:rowEditor />
+					</p:column>
+
+				</p:dataTable>
+			</div>
 
 		</h:form>
 	</ui:define>

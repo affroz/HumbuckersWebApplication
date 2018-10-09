@@ -22,6 +22,13 @@ public class ProjectWbsDTO {
 	private Long activityCode;
 	private String wbsname;
 	private Long projectKey;
+	@Override
+	public String toString() {
+		return activityName;
+	}
+	
+	
+	
 }
 
 

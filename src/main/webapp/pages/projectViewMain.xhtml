@@ -6,34 +6,146 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
 	<ui:define name="content">
-
+		<style>
+body .ui-tree.ui-tree-horizontal .ui-treenode-content {
+     border: none !Important;
+}
+</style>
 		<h:form prependId="false">
 
-			<h3>#{projectBean.project.projectName}</h3>
-			<p:tabView>
-				<p:tab title="Project Details">
-					 <ui:include src="projectdetailsView.xhtml"></ui:include>
-				</p:tab>
 
-				<p:tab title="Project Weightage">
 
-					 <ui:include src="projectWeightageView.xhtml"></ui:include>
 
-				</p:tab>
+			<div class="dashboard">
+				<div class="ui-g-12 activity-feed">
 
-				<p:tab title="Project Activities">
+					<div class="ui-g">
+						<div class="ui-g-12 ui-md-3">
+							<span>Engineering</span>
+							<div class="knob income">#{projectViewBean.engweight}%</div>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<span>Procurement</span>
+							<div class="knob tax">#{projectViewBean.procweight}%</div>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<span>Construction</span>
+							<div class="knob invoice">#{projectViewBean.constweight}%</div>
+						</div>
+						<div class="ui-g-12 ui-md-3">
+							<span>Testing and Commisioning</span>
+							<div class="knob expense">#{projectViewBean.testweight}%</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+ <div class="ui-g-12">
+                    <div class="card card-w-title">
+                         <p:tree value="#{projectBean.projectViewBean.root}" var="node" orientation="horizontal">
+        <p:treeNode>
+            <p:outputLabel value="#{node}" />
+        </p:treeNode>
+    </p:tree>
+                    </div></div>
+
+			<div class="ui-g-12">
+				<div class="card card-w-title">
+					<h1>WBS/Activities Details</h1>
 					
-					<ui:include src="projectActivitiesView.xhtml"></ui:include>
+					
+					
+					
+					
+					
+					<p:panel style="height:300px;overflow-y: scroll;">
 
-				</p:tab>
+						<p:treeTable value="#{projectBean.projectViewBean.root}"
+							var="document" id="treePnl" orientation="horizontal">
 
-				<p:tab title="Project Timeline">
 
-					 <ui:include src="projectTimelineView.xhtml"></ui:include>
 
-				</p:tab>
+							<p:columnGroup type="header">
+								<p:row>
+									<p:column rowspan="2" colspan="3" headerText="" />
+									<p:column colspan="2" headerText="Planned Dates" />
+									<p:column colspan="2" headerText="Actual Dates" />
+									<p:column rowspan="2" headerText="Remark" />
+								</p:row>
 
-			</p:tabView>
+
+
+								<p:row>
+									<p:column headerText="Start" />
+									<p:column headerText="End" />
+									<p:column headerText="Start" />
+									<p:column headerText="End" />
+								</p:row>
+							</p:columnGroup>
+
+
+
+							<p:column colspan="3">
+								<p:outputLabel value="#{document.activityName}"
+									style="#{document.activityCode eq 0 ? 'font-size: 19px;color: #1976d2;':''}" />
+							</p:column>
+							<p:column>
+
+								<p:outputLabel value="#{document.activityPlannedStartDate}"
+									class="form-control ">
+									<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</p:outputLabel>
+
+
+							</p:column>
+							<p:column>
+
+								<p:outputLabel value="#{document.activityPlannedEndDate}"
+									class="form-control ">
+									<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</p:outputLabel>
+
+
+							</p:column>
+							<p:column>
+
+								<p:outputLabel value="#{document.activityAcutalStartDate}"
+									class="form-control ">
+									<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</p:outputLabel>
+
+
+							</p:column>
+							<p:column>
+
+								<p:outputLabel value="#{document.activityActualEndDate}"
+									class="form-control ">
+									<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+								</p:outputLabel>
+
+
+							</p:column>
+
+							<p:column>
+
+
+
+
+							</p:column>
+						</p:treeTable>
+
+
+
+					</p:panel>
+				</div>
+			</div>
+
+
+
+
+
 
 
 
