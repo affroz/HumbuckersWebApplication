@@ -30,3 +30,47 @@
 	background-color: #f7a02d !Important;
 	color: white !Important;
 }
+
+
+.dashboard .mycard .user-card .user-card-header {
+    background-color: #ff9c07 !Important;
+    color: white !Important;
+}
+
+
+ .mycard h2 {
+    margin-left: 20px !Important;
+}
+
+
+.mytimeline .engineering {
+    color: #1976d2 !Important;
+}
+
+.mytimeline .procurement  {
+    color: #009688 !Important;
+}
+
+.mytimeline .construction  {
+    color: #e91e63 !Importan;
+}
+
+.mytimeline .testing  {
+    color: #673ab7 !Important;
+}
+
+.mycommandlink {
+	display: none !Important;
+}
+
+.ui-state-highlight .mycommandlink {
+	display: block !Important;
+}
+
+body .mytreetable .ui-treetable thead th:last-child {
+	border-right: none !Important;
+}
+
+body .mytreetable .ui-treetable thead th:first-child {
+	border-left: none !Important;
+}
