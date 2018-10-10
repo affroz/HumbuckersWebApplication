@@ -23,6 +23,13 @@ public class ProjectWbsDTO {
 	private String wbsname;
 	private Long projectKey;
 	private String style;
+	private String plannedPhysical;
+	private String actualPhysical;
+	private String plannedEarned;
+	private String actualEarned;
+	private String variance;
+	
+	
 	@Override
 	public String toString() {
 		return activityName;
