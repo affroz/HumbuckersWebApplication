@@ -449,8 +449,7 @@ body .ui-g-12 {
     .dashboard .user-card .user-card-header img {
       width: 100%; }
   .dashboard .user-card .user-card-content {
-    height: 340px;
-    background-color: #ffffff; }
+      background-color: #ffffff; }
     .dashboard .user-card .user-card-content img {
       margin: -40px 0 0 24px; }
     .dashboard .user-card .user-card-content .ui-button {
