@@ -10,8 +10,10 @@ import javax.inject.Named;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.timeline.TimelineEvent;
 import org.springframework.context.annotation.Scope;
 
+import com.humbuckers.dto.ProjectDTO;
 import com.humbuckers.dto.ProjectWbsDTO;
 import com.humbuckers.utils.AbstractRestTemplate;
 
@@ -40,6 +42,7 @@ public class ProjectViewBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		projectWbsMainList=new ArrayList<ProjectWbsDTO>();
+		projectReportBean.init();
 	}
 
     public void fetchProjectWbs(Long projectid) {
@@ -85,9 +88,11 @@ public class ProjectViewBean implements Serializable {
     	}
     }
     
-    public void createTreeStucture(Long projectKey, String projectName) {
-    	root = new DefaultTreeNode(projectName, null);
+    public ProjectDTO createTreeStucture(ProjectDTO project) {
+    	root = new DefaultTreeNode(project.getProjectName(), null);
 	    root.setExpanded(true);
+	    project.setTotalActivities(0);
+	    project.setTotalWbs(0);
 	 	if(projectWbsMainList!=null && projectWbsMainList.size()>0) {
 			for (ProjectWbsDTO entity : projectWbsMainList) {
 				
@@ -105,83 +110,33 @@ public class ProjectViewBean implements Serializable {
 					style="testing";
 				}
 				TreeNode node=new DefaultTreeNode(style,entity,root);
-				addToTreeNode(node, entity.getActivityId(),style);
+				project.setTotalWbs(project.getTotalWbs()+1);
+				addToTreeNode(node, entity.getActivityId(),style,project);
 				
 			}
 		}
+		return project;
 	}
 	
 	
     
-    public void addToTreeNode(TreeNode node, Long activityId, String style) {
+    public void addToTreeNode(TreeNode node, Long activityId, String style, ProjectDTO project) {
     	List<ProjectWbsDTO> subList=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParent/"+activityId,ProjectWbsDTO.class);
 		if(subList !=null && subList.size()>0) {
 			for (ProjectWbsDTO entity : subList) {
 				TreeNode childNode=new DefaultTreeNode(style,entity,node);
-				addToTreeNode(childNode, entity.getActivityId(),style);
+				entity.setStyle(style);
+				if(entity.getActivityCode()!=null && entity.getActivityCode()==1) {
+					projectReportBean.getActivityModel().add(new TimelineEvent(entity, entity.getActivityPlannedStartDate()));
+					project.setTotalActivities(project.getTotalActivities()+1);
+				}else {
+					project.setTotalWbs(project.getTotalWbs()+1);
+				}
+				addToTreeNode(childNode, entity.getActivityId(),style,project);
 			}
 		}
 	}
-    /*
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    public void test(ProjectActivitiesDTO entity,TreeNode node) {
-		List<ProjectActivitiesDTO> subList=AbstractRestTemplate.fetchObjectList("/project/fetchSubActivitiesByParent/"+entity.getActivityKey(),ProjectActivitiesDTO.class);
-		for (ProjectActivitiesDTO subentity : subList) {
-			ActivitiesDTO subdto= (ActivitiesDTO) AbstractRestTemplate.fetchObject("/activity/fetchactivity/"+subentity.getActivityKey(), ActivitiesDTO.class);
-			ProjectActivitiesViewDTO subact=new ProjectActivitiesViewDTO();
-			subact.setName(subdto.getActivityName());
-			subact.setActivityActualEndDate(subentity.getActivityActualEndDate());
-			subact.setActivityPlannedStartDate(subentity.getActivityPlannedStartDate());
-			subact.setActivityPlannedEndDate(subentity.getActivityPlannedEndDate());
-			subact.setActivityAcutalStartDate(subentity.getActivityAcutalStartDate());
-			subact.setActivityActualEndDate(subentity.getActivityActualEndDate());
-			
-			TreeNode subNode = new DefaultTreeNode(subact,node);
-			subNode.setExpanded(true);
-			if(style.equals("one")) {
-				setStyle("two");
-			}
-			else if(style.equals("two")) {
-				setStyle("three");
-			}
-			else if(style.equals("three")) {
-				setStyle("one");
-			}
-			projectReportBean.getRangemodel().add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate(), subentity.getActivityPlannedEndDate(),
-					true, subdto.getActivityName(),style));
-			projectReportBean.getBasicmodel().add(new TimelineEvent(subdto.getActivityName(), subentity.getActivityPlannedStartDate()));
-			if(subdto.getActivityType()!=2) {
-				test(subentity, subNode);
-			}
-			
-		}
-	}*/
+
 	
+   
 }

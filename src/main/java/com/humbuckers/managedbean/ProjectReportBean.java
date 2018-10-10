@@ -1,7 +1,6 @@
 package com.humbuckers.managedbean;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -21,24 +20,12 @@ public class ProjectReportBean implements Serializable {
 	private static final long serialVersionUID = 1094801825228386363L;
 
 
-	private TimelineModel basicmodel;
-	private TimelineModel rangemodel;
-    private boolean selectable = true;
-    private boolean zoomable = true;
-    private boolean moveable = true;
-    private boolean stackEvents = true;
-    private String eventStyle = "box";
-    private boolean axisOnTop;
-    private boolean showCurrentTime = true;
-    private boolean showNavigation = false;
-    private Date start;  
-    private Date end; 
+	private TimelineModel activityModel;
     
     
 	@PostConstruct
 	public void init() {
-		basicmodel = new TimelineModel();
-		rangemodel=new TimelineModel();
+		activityModel = new TimelineModel();
 		
 	}
 

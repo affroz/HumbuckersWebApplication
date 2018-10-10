@@ -57,14 +57,15 @@ public class ProjectBean implements Serializable {
 		setActiveIndex("0");
 		projectWbsBean.fetchNodes();
 		projectWbsBean.setProjectWbsDTO(new ProjectWbsDTO());
-		return "projectAddOrEditMain.xhtml?faces-redirect=true";
+		return "projectAddMain.xhtml?faces-redirect=true";
 	}
 	
 	
 	public String viewProject() {
+		projectViewBean.init();
 		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
 		projectViewBean.fetchProjectWbs(project.getProjectId());
-		projectViewBean.createTreeStucture(project.getProjectId(),project.getProjectName());
+		project=projectViewBean.createTreeStucture(project);
 		return "projectViewMain.xhtml?faces-redirect=true";
 	}
 	
@@ -75,7 +76,7 @@ public class ProjectBean implements Serializable {
 		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
 		List<ProjectWbsDTO> list=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParentByProject/"+projectId,ProjectWbsDTO.class);
 		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());*/
-		return "projectAddOrEditMain.xhtml?faces-redirect=true";
+		return "projectAddMain.xhtml?faces-redirect=true";
 	}
 	
 	

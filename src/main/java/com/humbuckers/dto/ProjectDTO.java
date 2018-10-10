@@ -21,6 +21,22 @@ public class ProjectDTO {
 	private Date projectPlannedStartDate;
 	private Date projectPlannedEndDate;
 	private Date projectAcutalStartDate;
+	private String projectDuration;
+	private int totalActivities;
+	private int totalWbs;
+	
+	
+	public String getProjectDuration() {
+		if(projectPlannedEndDate!=null && projectPlannedStartDate!=null) {
+			Long days=(projectPlannedEndDate.getTime() - projectPlannedStartDate.getTime()) / (1000 * 60 * 60 * 24);
+			setProjectDuration(days.toString());
+		}
+		return projectDuration;
+	}
+	
+	
+	
+	
 }
 
 
