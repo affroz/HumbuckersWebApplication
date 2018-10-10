@@ -1,0 +1,156 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui">
+	<div class="dashboard">
+		<p:panel header="#{projectBean.project.projectName}">
+			<div class="ui-g">
+
+				<div class="ui-g-4 mycard">
+					<div class="user-card ui-shadow-content">
+
+						<div class="user-card-content">
+
+
+							<div class="user-detail">
+								<ul>
+									<li class="clearfix">
+										<div class="project-progressbar">
+											<div class="project-progressbar-value" style="width: 50%"></div>
+										</div> <i class="fa fa-tasks fa-fw"></i> <span class="project-title">WBS</span>
+										<span class="project-detail">#{projectBean.project.totalWbs}</span>
+									</li>
+									<li class="clearfix">
+										<div class="project-progressbar">
+											<div class="project-progressbar-value" style="width: 20%"></div>
+										</div> <i class="fa fa-usd fa-fw"></i> <span class="project-title">Revenue</span>
+										<span class="project-detail"></span>
+									</li>
+
+									<li class="clearfix">
+										<div class="project-progressbar">
+											<div class="project-progressbar-value" style="width: 80%"></div>
+										</div> <i class="fa fa-users fa-fw"></i> <span class="project-title">Client</span>
+										<span class="project-detail"></span>
+									</li>
+
+									<li class="clearfix">
+										<div class="project-progressbar">
+											<div class="project-progressbar-value" style="width: 20%"></div>
+										</div> <i class="fa fa-calendar fa-fw"></i> <span
+										class="project-title">Total Duration planned</span> <span
+										class="project-detail">#{projectBean.project.projectDuration} Days</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="ui-g-8">
+
+
+
+					<div class="ui-g">
+						<div class="ui-g-3">
+							<p:outputLabel value="Project Name:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="#{projectBean.project.projectName}" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="Project Client:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="#{projectBean.project.projectClient}" />
+						</div>
+					</div>
+
+					<div class="ui-g">
+						<div class="ui-g-3">
+							<p:outputLabel value="Project Main Contractor:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectMainContractor}" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="Project Sub-Contractor:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectSubContractor}" />
+						</div>
+					</div>
+
+					<div class="ui-g">
+						<div class="ui-g-3">
+							<p:outputLabel value="Project MEP Sub-Contractor:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectMepSubContractor}" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="Project Interior Designer:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectInteriorDesigner}" />
+						</div>
+					</div>
+
+
+					<div class="ui-g">
+						<div class="ui-g-3">
+							<p:outputLabel value="Planned Start Date:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectPlannedStartDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</p:outputLabel>
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="Planned End Date:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectPlannedEndDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</p:outputLabel>
+						</div>
+					</div>
+
+					<div class="ui-g">
+						<div class="ui-g-3">
+							<p:outputLabel value="Actual Start Date:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectAcutalStartDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</p:outputLabel>
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel value="Actual End Date:" />
+						</div>
+						<div class="ui-g-3">
+							<p:outputLabel
+								value="#{projectBean.project.projectActualEndDate}">
+								<f:convertDateTime type="date" pattern="dd-MM-yyyy" />
+							</p:outputLabel>
+						</div>
+					</div>
+
+
+
+				</div>
+			</div>
+		</p:panel>
+	</div>
+
+</ui:composition>

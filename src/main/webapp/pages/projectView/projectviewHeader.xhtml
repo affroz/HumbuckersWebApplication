@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui">
+	<div class="ui-g dashboard">
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-1">
+						<span class="overview-box-name">Planned Start Date</span> <span
+							class="overview-box-count"><p:outputLabel
+								value="#{projectBean.project.projectPlannedStartDate}">
+								<f:convertDateTime type="date" pattern="dd-MMM-yyyy" />
+							</p:outputLabel></span> <span class="overview-box-badge"></span><img id="j_idt79"
+							src="../javax.faces.resource/images/dashboard/chart-1.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-2">
+						<span class="overview-box-name">Planned End Date</span> <span
+							class="overview-box-count"><p:outputLabel
+								value="#{projectBean.project.projectPlannedEndDate}">
+								<f:convertDateTime type="date" pattern="dd-MMM-yyyy" />
+							</p:outputLabel></span> <span class="overview-box-badge"></span><img id="j_idt81"
+							src="../javax.faces.resource/images/dashboard/chart-2.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-3">
+						<span class="overview-box-name">Project Duration</span> <span
+							class="overview-box-count">#{projectBean.project.projectDuration} Days</span> <span
+							class="overview-box-badge"></span><img id="j_idt83"
+							src="../javax.faces.resource/images/dashboard/chart-3.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+				<div class="ui-g-12 ui-md-6 ui-lg-3">
+					<div class="ui-g card overview-box overview-box-4">
+						<span class="overview-box-name">Total Activities</span> <span
+							class="overview-box-count">#{projectBean.project.totalActivities}</span> <span
+							class="overview-box-badge"></span><img id="j_idt85"
+							src="../javax.faces.resource/images/dashboard/chart-4.svg?ln=barcelona-layout"
+							alt="" />
+					</div>
+				</div>
+
+			</div>
+
+</ui:composition>

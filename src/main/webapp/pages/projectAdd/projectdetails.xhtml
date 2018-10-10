@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui">
+
+
+
+
+	<p:panel header="Please Enter details">
+		<div class="ui-fluid">
+			<p:panelGrid columns="4"
+				columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4"
+				layout="grid" styleClass="ui-panelgrid-blank">
+
+				<p:outputLabel value="Project Name:" />
+				<p:inputText value="#{projectBean.project.projectName}" />
+				<p:outputLabel value="Project Client:" />
+				<p:inputText value="#{projectBean.project.projectClient}" />
+
+
+				<p:outputLabel value="Project Main Contractor:" />
+				<p:inputText value="#{projectBean.project.projectMainContractor}" />
+				<p:outputLabel value="Project Sub-Contractor:" />
+				<p:inputText value="#{projectBean.project.projectSubContractor}" />
+				
+				<p:outputLabel value="Project MEP Sub-Contractor:" />
+				<p:inputText value="#{projectBean.project.projectMepSubContractor}" />
+				<p:outputLabel value="Project Interior Designer:" />
+				<p:inputText value="#{projectBean.project.projectInteriorDesigner}" />
+				
+				<p:outputLabel value="Planned Start Date:" />
+				<p:calendar value="#{projectBean.project.projectPlannedStartDate}"
+					pattern="dd-MMM-yyyy" />
+				<p:outputLabel value="Planned End Date:" />
+				<p:calendar value="#{projectBean.project.projectPlannedEndDate}"
+					pattern="dd-MMM-yyyy" />
+				
+				<p:outputLabel value="Actual Start Date:" />
+				<p:calendar value="#{projectBean.project.projectAcutalStartDate}"
+					pattern="dd-MMM-yyyy" />
+				<p:outputLabel value="Actual End Date:" />
+				<p:calendar value="#{projectBean.project.projectActualEndDate}"
+					pattern="dd-MMM-yyyy" />
+
+			</p:panelGrid>
+
+			<div class="ui-g footer-content">
+				<div class="ui-g-12 ui-md-11"></div>
+				<div class="ui-g-12 ui-md-1">
+					<p:commandButton value="Next" action="#{projectBean.onClickofNext}"
+						ajax="false" update="@form" />
+				</div>
+			</div>
+
+		</div>
+
+	</p:panel>
+
+</ui:composition>

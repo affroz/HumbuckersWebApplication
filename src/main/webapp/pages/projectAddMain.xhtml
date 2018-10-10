@@ -9,15 +9,18 @@
 
 		<h:form prependId="false" id="projectdetailsform">
 			<p:growl></p:growl>
+			<div class="card card-w-title">
 
-			<h:panelGroup id="projectSteps">
-				<h:panelGroup rendered="#{projectBean.activeIndex eq '0'}">
-					<ui:include src="projectdetails.xhtml"></ui:include>
+				<h1>Add New Project</h1>
+				<h:panelGroup id="projectSteps">
+					<h:panelGroup rendered="#{projectBean.activeIndex eq '0'}">
+						<ui:include src="projectAdd/projectdetails.xhtml"></ui:include>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{projectBean.activeIndex eq '1'}">
+						<ui:include src="projectAdd/projectactivities.xhtml"></ui:include>
+					</h:panelGroup>
 				</h:panelGroup>
-				<h:panelGroup rendered="#{projectBean.activeIndex eq '1'}">
-					<ui:include src="projectactivities.xhtml"></ui:include>
-				</h:panelGroup>
-			</h:panelGroup>
+			</div>
 		</h:form>
 	</ui:define>
 </ui:composition>
