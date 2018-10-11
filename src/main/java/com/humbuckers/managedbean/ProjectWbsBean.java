@@ -87,9 +87,12 @@ public class ProjectWbsBean implements Serializable {
 		setProjectWbsDTO(new ProjectWbsDTO());
 	}
 	
-	public void addToList(TreeNode node, Long projectKey) {
+	public void addToList(TreeNode node, Long projectKey,Long mainparentKey) {
 		ProjectWbsDTO dto=(ProjectWbsDTO) node.getData();
 		dto.setActivityId(dto.getActivityId()==null ?fetchMaxWbsId():dto.getActivityId());
+		if(mainparentKey==null) {
+			mainparentKey=dto.getActivityId();
+		}
 		dto.setProjectKey(projectKey);
 		projectWbsList.add(dto);
 		if(node!=null && node.getChildren()!=null) {
@@ -98,9 +101,11 @@ public class ProjectWbsBean implements Serializable {
 				childdto.setActivityId(childdto.getActivityId()==null ?fetchMaxWbsId():childdto.getActivityId());
 				childdto.setParentKey(dto.getActivityId());
 				childdto.setProjectKey(projectKey);
+				childdto.setMainParentKey(mainparentKey);
+				
 				projectWbsList.add(childdto);
 	            if (childNode.getChildCount() > 0) {
-	            	addToList(childNode,projectKey);
+	            	addToList(childNode,projectKey,mainparentKey);
 	            }
 	        }
 		}
@@ -110,7 +115,7 @@ public class ProjectWbsBean implements Serializable {
 		projectWbsList=new ArrayList<ProjectWbsDTO>();
 		if(root!=null && root.getChildCount()>0) {
 			for (TreeNode node : root.getChildren()) {
-				addToList(node,projectKey);
+				addToList(node,projectKey,null);
 			}
 		}
 		if(projectWbsList!=null && projectWbsList.size()>0) {

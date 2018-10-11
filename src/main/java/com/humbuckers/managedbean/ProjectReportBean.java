@@ -1,12 +1,16 @@
 package com.humbuckers.managedbean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 
 import org.primefaces.model.timeline.TimelineModel;
 import org.springframework.context.annotation.Scope;
+
+import com.humbuckers.dto.ProjectWbsDTO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,15 +26,11 @@ public class ProjectReportBean implements Serializable {
 
 	private TimelineModel activityModel;
     
-    
 	@PostConstruct
 	public void init() {
 		activityModel = new TimelineModel();
 		
 	}
-
-	
-	
 
 
 	

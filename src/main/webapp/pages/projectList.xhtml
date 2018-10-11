@@ -86,6 +86,14 @@
 
 											<i class="pe-7s-look"></i>
 										</p:commandLink>
+										
+										<p:commandLink class="pull-right" value="Edit"
+											action="#{projectBean.editProject}">
+											<f:setPropertyActionListener value="#{project.projectId}"
+												target="#{projectBean.projectId}" />
+
+											<i class="pe-7s-look"></i>
+										</p:commandLink>
 								</div>
 							</div>
 						</div>

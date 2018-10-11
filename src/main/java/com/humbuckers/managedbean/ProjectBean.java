@@ -10,6 +10,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.primefaces.model.DefaultTreeNode;
 import org.springframework.context.annotation.Scope;
 
 import com.humbuckers.dto.ProjectDTO;
@@ -71,11 +72,11 @@ public class ProjectBean implements Serializable {
 	
 	
 	public String editProject() {
-		/*project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
+		project =(ProjectDTO) AbstractRestTemplate.fetchObject("/project/fetchProjectById/"+projectId, ProjectDTO.class); 
 		setActiveIndex("0");
-		projectWbsBean.setRoot(new DefaultTreeNode("WBS", null));
+		projectWbsBean.setRoot(new DefaultTreeNode(project.getProjectName(), null));
 		List<ProjectWbsDTO> list=AbstractRestTemplate.fetchObjectList("/project/fetchWbsByParentByProject/"+projectId,ProjectWbsDTO.class);
-		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());*/
+		projectWbsBean.fetchTreeWbsNode(list, projectWbsBean.getRoot());
 		return "projectAddMain.xhtml?faces-redirect=true";
 	}
 	
