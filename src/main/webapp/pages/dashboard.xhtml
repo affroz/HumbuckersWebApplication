@@ -6,11 +6,17 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core"
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
 	<ui:define name="content">
+		
+		
+		
 		<h:form prependId="false">
 
 			
 
-
+<humbuckers:humbuckersChart type="column"
+											animationEnabled="true" chartTitle="test" yaxisTitle="t"
+											yaxisSuffix="" yaxisIncludeZero="" xaxisTitle="" id="test"
+											value="#{dashboardBean.columnchart}" />
 
 
 

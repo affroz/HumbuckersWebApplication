@@ -10,7 +10,7 @@ import javax.inject.Named;
 import org.primefaces.model.timeline.TimelineModel;
 import org.springframework.context.annotation.Scope;
 
-import com.humbuckers.dto.ProjectWbsDTO;
+import com.humbuckers.component.HumbuckersChartModule;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -25,11 +25,20 @@ public class ProjectReportBean implements Serializable {
 
 
 	private TimelineModel activityModel;
+	private List<HumbuckersChartModule> columnchart;
     
 	@PostConstruct
 	public void init() {
 		activityModel = new TimelineModel();
+		columnchart=new ArrayList<HumbuckersChartModule>();
 		
+	}
+	
+	
+	
+	public void plotBarChart(String startName, Double startPoint, Double endPoint) {
+		HumbuckersChartModule chart=new HumbuckersChartModule(startName,startPoint,endPoint,null,null);
+		columnchart.add(chart);
 	}
 
 

@@ -94,7 +94,10 @@ public class ProjectViewBean implements Serializable {
 	    project.setTotalActivities(0);
 	    project.setTotalWbs(0);
 	 	if(projectWbsMainList!=null && projectWbsMainList.size()>0) {
-			for (ProjectWbsDTO entity : projectWbsMainList) {
+			    Double planEarned=0.00;
+			    Double actualEarned=0.00;
+			    
+	 		for (ProjectWbsDTO entity : projectWbsMainList) {
 				
 				String style = null;
 				if(entity.getActivityName()!=null && "Engineering".equalsIgnoreCase(entity.getActivityName())) {
@@ -112,8 +115,14 @@ public class ProjectViewBean implements Serializable {
 				TreeNode node=new DefaultTreeNode(style,entity,root);
 				project.setTotalWbs(project.getTotalWbs()+1);
 				addToTreeNode(node, entity.getActivityId(),style,project);
+				if(entity.getPlancal()!=null && !"".equals(entity.getPlancal()))
+				planEarned=planEarned+Double.valueOf(entity.getPlancal());
+				if(entity.getActualcal()!=null && !"".equals(entity.getActualcal()))
+				actualEarned=actualEarned+Double.valueOf(entity.getActualcal());
 				
 			}
+	 		projectReportBean.plotBarChart("Plan Earned", 0.00, planEarned);
+	 		projectReportBean.plotBarChart("Plan Earned", 0.00, actualEarned);
 		}
 		return project;
 	}

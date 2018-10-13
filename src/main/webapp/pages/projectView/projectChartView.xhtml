@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:humbuckers="http://com.is.faces/ui">
+
+	
+	
+	<div class="dashboard">
+
+		<div class="ui-g-12 activity-feed">
+			<p:panel>
+				<div class="ui-g">
+					<div class="ui-g-12 ui-md-3">
+						<span>Engineering</span>
+						<div class="knob income">#{projectViewBean.engweight}%</div>
+					</div>
+					<div class="ui-g-12 ui-md-3">
+						<span>Procurement</span>
+						<div class="knob tax">#{projectViewBean.procweight}%</div>
+					</div>
+					<div class="ui-g-12 ui-md-3">
+						<span>Construction</span>
+						<div class="knob invoice">#{projectViewBean.constweight}%</div>
+					</div>
+					<div class="ui-g-12 ui-md-3">
+						<span>Testing and Commisioning</span>
+						<div class="knob expense">#{projectViewBean.testweight}%</div>
+					</div>
+				</div>
+
+
+				<p:dataTable var="act"
+					value="#{projectBean.projectViewBean.projectWbsMainList}">
+					<p:column headerText="Description">
+						<h:outputText value="#{act.activityName}" />
+					</p:column>
+
+
+
+					<p:column headerText="Plan (Physical %)">
+						<h:outputText value="#{act.plannedEarned}" />
+					</p:column>
+
+
+					<p:column headerText="Actual (Physical %)">
+						<h:outputText value="#{act.actualEarned}" />
+					</p:column>
+
+					<p:column headerText="Plan (Earned %)">
+						<h:outputText value="#{act.plancal}" />
+					</p:column>
+
+
+					<p:column headerText="Actual  (Earned %)">
+						<h:outputText value="#{act.actualcal}" />
+					</p:column>
+
+					<p:column headerText="Variance">
+						<h:outputText value="#{act.variance}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</p:panel>
+		</div>
+
+	</div>
+	
+	<div class="ui-g-12">
+		<p:panel>
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6">
+					<humbuckers:humbuckersChart type="column" animationEnabled="true"
+						chartTitle="" yaxisTitle="" yaxisSuffix="" yaxisIncludeZero=""
+						xaxisTitle="" id="test"
+						value="#{projectBean.projectViewBean.projectReportBean.columnchart}" />
+
+				</div>
+			</div>
+		</p:panel>
+	</div>
+	
+	
+
+</ui:composition>
