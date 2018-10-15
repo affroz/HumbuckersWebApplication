@@ -3,10 +3,12 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets" template="login-template.xhtml"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-    </h:head>
+<style>
+
+  </style>  </h:head>
 <ui:define name="content">
  
-	<h:form styleClass="login-body">
+	<h:form>
 		<p:growl id="message"></p:growl>
 		<div class="login-panel ui-fluid">
 			<div class="ui-g">
@@ -27,9 +29,9 @@
 						<label>Password</label></span>
 				</div>
 
-				<div class="ui-g-12 button-container">
+				<div class="ui-g-12 button-container"> 	
 
-					<p:commandButton value="Login"
+					<p:commandButton value="Login" style="background-color: #586278 !Important;"
 						action="#{loginBean.validateUserLogin}"
 						class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
 						id="submit" update="message" />
