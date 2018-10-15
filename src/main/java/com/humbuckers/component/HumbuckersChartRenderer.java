@@ -1,6 +1,7 @@
 package com.humbuckers.component;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.faces.component.UIComponent;
@@ -51,12 +52,46 @@ public class HumbuckersChartRenderer extends CoreRenderer {
 		writer.writeAttribute("yAxisIncludeZero", chart.isYaxisIncludeZero(), null);
 		writer.writeAttribute("xAxisIncludeZero", chart.isXaxisIncludeZero(), null);
 		Gson gson = new Gson();
-		String jsonString = gson.toJson(list);
-		jsonString=jsonString.replace("labelDataPoint", "label");
-		jsonString=jsonString.replace("xDataPoint", "x");
-		jsonString=jsonString.replace("yDataPoint", "y");
+		if(chart.getType().equals("combined")) {
+			List<HumbuckersChartModule> list1=list.get(0).getList();
+			String jsonString1 = gson.toJson(list1);
+			jsonString1=jsonString1.replace("labelDataPoint", "label");
+			jsonString1=jsonString1.replace("01-Jan-3916", (CharSequence) new Date(2016, 1, 0));
+			jsonString1=jsonString1.replace("xDataPoint", "x");
+			jsonString1=jsonString1.replace("yDataPoint", "y");
+			writer.writeAttribute("list1",jsonString1, null);
+			
+			List<HumbuckersChartModule> list2=list.get(1).getList();
+			String jsonString2 = gson.toJson(list2);
+			jsonString2=jsonString2.replace("labelDataPoint", "label");
+			jsonString2=jsonString2.replace("xDataPoint", "x");
+			jsonString2=jsonString2.replace("yDataPoint", "y");
+			writer.writeAttribute("list2",jsonString2, null);
+			
+			List<HumbuckersChartModule> list3=list.get(2).getList();
+			String jsonString3 = gson.toJson(list3);
+			jsonString3=jsonString3.replace("labelDataPoint", "label");
+			jsonString3=jsonString3.replace("xDataPoint", "x");
+			jsonString3=jsonString3.replace("yDataPoint", "y");
+			writer.writeAttribute("list3",jsonString3, null);
+			
+			List<HumbuckersChartModule> list4=list.get(3).getList();
+			String jsonString4 = gson.toJson(list4);
+			jsonString4=jsonString4.replace("labelDataPoint", "label");
+			jsonString4=jsonString4.replace("xDataPoint", "x");
+			jsonString4=jsonString4.replace("yDataPoint", "y");
+			writer.writeAttribute("list4",jsonString4, null);
+
+		}else {
+			String jsonString = gson.toJson(list);
+			jsonString=jsonString.replace("labelDataPoint", "label");
+			jsonString=jsonString.replace("xDataPoint", "x");
+			jsonString=jsonString.replace("yDataPoint", "y");
+			writer.writeAttribute("list",jsonString, null);
+		}
 		
-		writer.writeAttribute("list",jsonString, null);
+	
+		
         writer.endElement("div");
 	}
 	

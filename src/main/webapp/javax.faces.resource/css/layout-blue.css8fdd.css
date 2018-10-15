@@ -596,8 +596,8 @@ body .ui-g-12 {
     box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19); }
     .login-body .login-panel .login-header {
       margin-bottom: 30px;
-      background-color: #1976d2;
-      color: #BBDEFB;
+      background-color: #586278;
+      color: #ffffff;
       position: relative; }
       .login-body .login-panel .login-header h1 {
         font-size: 18px;
@@ -617,8 +617,7 @@ body .ui-g-12 {
       padding: 20px 70px; }
 
 @media (min-width: 1441px) {
-  .login-body {
-    background-size: contain; } }
+  .login-body {} }
 @media (max-width: 640px) {
   .login-body {
     padding-top: 150px; }

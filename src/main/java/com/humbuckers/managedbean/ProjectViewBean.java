@@ -34,6 +34,7 @@ public class ProjectViewBean implements Serializable {
 	private String constweight;
 	private String testweight;
 	private TreeNode root;
+	private String viewId;
 	
 	@Inject
 	private ProjectReportBean projectReportBean;
@@ -43,6 +44,7 @@ public class ProjectViewBean implements Serializable {
 	public void init() {
 		projectWbsMainList=new ArrayList<ProjectWbsDTO>();
 		projectReportBean.init();
+		setViewId("0");
 	}
 
     public void fetchProjectWbs(Long projectid) {
@@ -121,8 +123,8 @@ public class ProjectViewBean implements Serializable {
 				actualEarned=actualEarned+Double.valueOf(entity.getActualcal());
 				
 			}
-	 		projectReportBean.plotBarChart("Plan Earned", 0.00, planEarned);
-	 		projectReportBean.plotBarChart("Plan Earned", 0.00, actualEarned);
+	 		projectReportBean.plotBarChart("Plan Earned", null, planEarned);
+	 		projectReportBean.plotBarChart("Actual Earned", null, 6.00);
 		}
 		return project;
 	}
@@ -145,6 +147,12 @@ public class ProjectViewBean implements Serializable {
 			}
 		}
 	}
+    
+    
+    
+    public void onClickOfViewHeader(String id) {
+    	setViewId(id);
+    }
 
 	
    

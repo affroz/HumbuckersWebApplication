@@ -1,5 +1,12 @@
 package com.humbuckers.component;
 
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class HumbuckersChartModule {
 
 	private String labelDataPoint;
@@ -7,37 +14,10 @@ public class HumbuckersChartModule {
 	private Double yDataPoint;
 	private Double[] arrayXDataPoint;
 	private Double[] arrayYDataPoint;
+	private String xDate;
+	private List<HumbuckersChartModule> list;
 	
-	public String getLabelDataPoint() {
-		return labelDataPoint;
-	}
-	public void setLabelDataPoint(String labelDataPoint) {
-		this.labelDataPoint = labelDataPoint;
-	}
-	public Double getxDataPoint() {
-		return xDataPoint;
-	}
-	public void setxDataPoint(Double xDataPoint) {
-		this.xDataPoint = xDataPoint;
-	}
-	public Double getyDataPoint() {
-		return yDataPoint;
-	}
-	public void setyDataPoint(Double yDataPoint) {
-		this.yDataPoint = yDataPoint;
-	}
-	public Double[] getArrayXDataPoint() {
-		return arrayXDataPoint;
-	}
-	public void setArrayXDataPoint(Double[] arrayXDataPoint) {
-		this.arrayXDataPoint = arrayXDataPoint;
-	}
-	public Double[] getArrayYDataPoint() {
-		return arrayYDataPoint;
-	}
-	public void setArrayYDataPoint(Double[] arrayYDataPoint) {
-		this.arrayYDataPoint = arrayYDataPoint;
-	}
+	
 	public HumbuckersChartModule(String labelDataPoint,Double xDataPoint,Double yDataPoint,Double[] arrayXDataPoint,Double[] arrayYDataPoint) {
 		this.labelDataPoint = labelDataPoint;
 		this.xDataPoint = xDataPoint;
@@ -46,5 +26,12 @@ public class HumbuckersChartModule {
 		this.arrayYDataPoint = arrayYDataPoint;
 	}
 	
+	public HumbuckersChartModule(String xDate,Double yDataPoint) {
+		this.xDate = xDate;
+		this.yDataPoint = yDataPoint;
+	}
 	
+	public HumbuckersChartModule(List<HumbuckersChartModule> list) {
+		this.list = list;
+	}
 }

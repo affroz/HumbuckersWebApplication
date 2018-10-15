@@ -1225,8 +1225,7 @@ body {
         .layout-wrapper .topbar .topbar-menu > li.profile-item .profile-info {
           display: inline-block;
           vertical-align: middle;
-          max-width: 100px;
-          margin-top: -5px; }
+          max-width: 100px; }
           .layout-wrapper .topbar .topbar-menu > li.profile-item .profile-info .topbar-item-name {
             -moz-transition: color 0.3s;
             -o-transition: color 0.3s;
