@@ -7,19 +7,34 @@
 	xmlns:humbuckers="http://com.is.faces/ui" template="template.xhtml">
 	<ui:define name="content">
 
-		<h:form prependId="false">
+		<h:form prependId="false" id="viewform">
 
 			<ui:include src="projectView/projectviewHeader.xhtml"></ui:include>
+			
+			
+			<h:panelGroup rendered="#{projectBean.projectViewBean.viewId eq '0'}">
+			
+				<ui:include src="projectView/projectdetailsView.xhtml"></ui:include>
+				
+				
+				
+			</h:panelGroup>
+			
+			
+			<h:panelGroup rendered="#{projectBean.projectViewBean.viewId eq '1'}">
+			
+				<ui:include src="projectView/projectTreeView.xhtml"></ui:include>
 
-			<ui:include src="projectView/projectdetailsView.xhtml"></ui:include>
+				<ui:include src="projectView/projectActivitesDetails.xhtml"></ui:include>
 
-			<ui:include src="projectView/projectChartView.xhtml"></ui:include>
-
-			<ui:include src="projectView/projectTreeView.xhtml"></ui:include>
-
-			<ui:include src="projectView/projectActivitesDetails.xhtml"></ui:include>
-
-			<ui:include src="projectView/projectReportView.xhtml"></ui:include>
+				<ui:include src="projectView/projectReportView.xhtml"></ui:include>
+				
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{projectBean.projectViewBean.viewId eq '2'}">
+			
+				<ui:include src="projectView/projectChartView.xhtml"></ui:include>
+			</h:panelGroup>
 
 		</h:form>
 	</ui:define>

@@ -5,23 +5,48 @@
 	xmlns:p="http://primefaces.org/ui">
 	<h:form>
 
+
 		<div class="topbar">
-			<div class="logo"></div>
-			<img src="../resources/images/logo1.png" class="app-name" /> <a
+			<img src="../resources/images/logo.png" class="app-name" style="height:60px !Important;"/> <a
 				id="topbar-menu-button" href="#"> <i class="fa fa-bars"></i>
 			</a>
-			<ul class="topbar-menu fadeInDown animated">
+			<ul class="topbar-menu  animated">
+				<li><p:commandLink action="#{loginBean.logout}" id="submit">
+						<i class="fa fa-fw fa-power-off"></i>
+					</p:commandLink></li>
+
+
 				<li class="profile-item"><a id="topbar-usermenu-button"
 					href="#">
-						<div class="profile-image"></div>
+						<div class="profile-image">
+							<img src="../resources/images/me.jpg" />
+						</div>
 						<div class="profile-info">
 							<span class="topbar-item-name profile-name">#{sessionScope['LOGIN_USER'].fullName}</span>
 							<span class="topbar-item-name profile-role">#{sessionScope['LOGIN_USER'].userRole.name}</span>
-						</div> <p:commandLink value="Logout" action="#{loginBean.logout}"
-							id="submit" />
+						</div>
 				</a></li>
 			</ul>
 		</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	</h:form>
 
 
