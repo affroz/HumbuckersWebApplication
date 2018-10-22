@@ -74,3 +74,8 @@ body .mytreetable .ui-treetable thead th:last-child {
 body .mytreetable .ui-treetable thead th:first-child {
 	border-left: none !Important;
 }
+
+body .mydatagrid .ui-widget-content {
+	background-color: none !Important;
+	border: none !Important;
+}

@@ -8,104 +8,73 @@
 
 	<ui:define name="content">
 
+
 		<f:metadata>
 			<f:event type="preRenderView" listener="#{projectBean.onPageLoad}" />
 		</f:metadata>
 
-
-
+		<style>
+.mycard {
+	color: #040404 !Important;
+}
+</style>
 		<h:form prependId="false">
 			<p:growl id="message"></p:growl>
-			<div class="card">
-				<div class="header">
-
-					<div class="row">
-						<div class="col-md-8">
-							<h3 style="color: #87CB16 !important">Projects</h3>
-						</div>
-						<div class="col-md-4">
-							<p:commandButton class="btn btn-info btn-fill pull-right"
-								action="#{projectBean.addNewProject}" ajax="false"
-								value="ADD NEW PROJECT">
-							</p:commandButton>
-						</div>
-					</div>
+			<p:panel header="Projects">
 
 
-				</div>
-
-				<div class="content mydatagrid">
-
+				<p:commandButton class="btn btn-info btn-fill pull-right"
+					style="background-color: #19d29f !Important;"
+					icon="fa fa-fw fa-plus" action="#{projectBean.addNewProject}"
+					ajax="false" value="ADD PROJECT">
+				</p:commandButton>
+				<div class="ui-fluid mydatagrid">
 					<p:dataGrid var="project" value="#{projectBean.projectList}"
 						columns="3" layout="grid" rows="6" paginator="false"
 						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="6,12,16" emptyMessage="No Projects found">
-
-						<div class="card mycard">
-							<div class="myhover">
-								<div class="myhoverimg">
-									<div class="row">
-										<p:commandLink action="#{projectBean.editProject}"
-											update="message" class="pull-right">
-											<f:setPropertyActionListener value="#{project.projectId}"
-												target="#{projectBean.projectId}" />
-											<i class="pe-7s-pen"></i>
-										</p:commandLink>
-									</div>
-									<div class="row">
-									
-									</div>
-
-
-
-
-
-
-								</div>
-								<div class="card-header text-warning">
-									<h3>#{project.projectName}</h3>
-								</div>
-								<div class="card-body">
-									<p class="card-text">
-										<small>Client:</small> #{project.projectClient}
-									</p>
-									<p class="card-text">
-										<small>Main Contractor:</small>
-										#{project.projectMainContractor}
-									</p>
-									<p class="card-text">
-										<small>Interior Designer:</small>
-										#{project.projectInteriorDesigner}
-									</p>
+						<div class="ui-g dashboard">
+							<div class="ui-g-12">
+								<div class="ui-g card overview-box overview-box-3"
+									style="background: none !Important;">
+									<span class="overview-box-name mycard">#{project.projectDuration} Days, #{project.totalWbs} WBS 
+									 #{project.totalActivities} Activities, 
 									
 									
-										<p:commandLink class="pull-right" value="view"
-											action="#{projectBean.viewProject}">
+									</span>
+									
+									
+									
+									
+									
+									<span class="overview-box-count mycard">#{project.projectName}</span> 
+									
+									
+									
+									<span class="overview-box-badge"
+										style="background: none !Important;"> <p:commandButton
+											icon="fa fa-fw fa-edit"
+											style="float: right;background-color: #ff563f !Important;"
+											action="#{projectBean.editProject}" ajax="false">
 											<f:setPropertyActionListener value="#{project.projectId}"
 												target="#{projectBean.projectId}" />
-
-											<i class="pe-7s-look"></i>
-										</p:commandLink>
-										
-										<p:commandLink class="pull-right" value="Edit"
-											action="#{projectBean.editProject}">
+										</p:commandButton> <p:commandButton icon="fa fa-fw fa-info"
+											style="background-color: #2891e4 !Important;"
+											action="#{projectBean.viewProject}" ajax="false">
 											<f:setPropertyActionListener value="#{project.projectId}"
 												target="#{projectBean.projectId}" />
-
-											<i class="pe-7s-look"></i>
-										</p:commandLink>
+										</p:commandButton>
+									</span>
+									
+									
 								</div>
 							</div>
 						</div>
 
-
-
 					</p:dataGrid>
-
-
-
 				</div>
-			</div>
+			</p:panel>
+
 		</h:form>
 	</ui:define>
 </ui:composition>
